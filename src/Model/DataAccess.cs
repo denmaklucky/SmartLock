@@ -18,7 +18,7 @@ public class DataAccess : IDataAccess, IDisposable
     }
 
     public Task<User> GetUser(string userName, CancellationToken token)
-        => _context.Users.FirstOrDefaultAsync(u => u.Name == userName, token);
+        => _context.Users.FirstOrDefaultAsync(u => u.UserName == userName, token);
 
     public void Dispose()
     {

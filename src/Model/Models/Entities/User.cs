@@ -8,7 +8,7 @@ public class User : IEntityBase
     public Guid Id { get; set; }
     
     [Required]
-    public string Name { get; set; }
+    public string UserName { get; set; }
     
     [Required]
     public string PasswordHash { get; set; }

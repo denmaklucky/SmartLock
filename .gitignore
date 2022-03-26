@@ -8,3 +8,6 @@ Release
 .idea
 obj
 *.json
+*.db
+*.db-shm
+*.db-wal
