@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Model.Models.Entities;
 
-public class LockSettings : EntityModifiedBase
+public class LockSetting : EntityModifiedBase
 {
     [Required]
     public Guid LockId { get; set; }

@@ -27,4 +27,5 @@ public class ApplicationContext : DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<UserLock> UserLocks { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
+    public DbSet<LockSetting> LockSettings { get; set; }
 }
