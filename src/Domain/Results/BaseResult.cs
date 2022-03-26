@@ -2,6 +2,6 @@
 
 public abstract class BaseResult
 {
-    public string ErrorType { get; set; }
-    public bool IsSuccess => string.IsNullOrWhiteSpace(ErrorType);
+    public string ErrorCode { get; set; }
+    public bool IsSuccess => string.IsNullOrWhiteSpace(ErrorCode);
 }

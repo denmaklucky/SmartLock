@@ -1,9 +1,12 @@
-﻿using Domain.Queries;
+﻿using Domain.Commands;
+using Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Extensions;
 using WebApi.Filters;
 using WebApi.Requests;
+using WebApi.Responses;
 
 namespace WebApi.Controllers;
 
@@ -36,7 +39,8 @@ public class LocksController : ControllerBase
     [HttpPost, ValidateRequest, Route("create")]
     public async Task<IActionResult> Create([FromBody] CreateLockRequest request, CancellationToken token)
     {
-        return Ok();
+        var result = await _mediator.Send(new CreateLockCommand(request.Title, request.ActivationKey, User.GetUserId()), token);
+        return result.IsSuccess ? Ok(result) : BadRequest(new ErrorResponse(result.ErrorCode, result.ErrorCode));
     }
 
     [Authorize(Roles = "admin")]

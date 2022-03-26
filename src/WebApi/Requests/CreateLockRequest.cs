@@ -1,6 +1,5 @@
-﻿namespace WebApi.Requests;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class CreateLockRequest
-{
-    
-}
+namespace WebApi.Requests;
+
+public record CreateLockRequest(string Title, [Required]string ActivationKey);

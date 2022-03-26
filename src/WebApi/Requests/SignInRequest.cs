@@ -1,3 +1,5 @@
-﻿namespace WebApi.Requests;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record SignInRequest(string Login, string Password);
+namespace WebApi.Requests;
+
+public record SignInRequest([Required]string Login, [Required]string Password);

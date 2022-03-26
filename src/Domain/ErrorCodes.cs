@@ -1,0 +1,7 @@
+﻿namespace Domain;
+
+public static class ErrorCodes
+{
+    public const string UserNotFound = "UserNotFound";
+    public const string InvalidPassword = "InvalidPassword";
+}

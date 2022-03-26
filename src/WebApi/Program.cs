@@ -1,11 +1,15 @@
 using System.Text;
 using Domain;
+using Domain.Commands;
 using Domain.Options;
 using Domain.Services;
+using Domain.Validators;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Model;
+using WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
@@ -40,7 +44,12 @@ builder.Services.AddAuthentication("Bearer")
 
 builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection(TokenOptions.SectionName));
 
+builder.Services.AddScoped<IValidator<CreateLockCommand>, CreateLockCommandValidator>();
+
+
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.MapDefaultControllerRoute();
 app.UseAuthentication();
 app.UseAuthorization();

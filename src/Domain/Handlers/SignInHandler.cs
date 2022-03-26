@@ -23,15 +23,15 @@ public class SignInHandler : IRequestHandler<SignInCommand, SignInResult>
     {
         var user = await _dataAccess.GetUser(request.Login, cancellationToken);
         if (user == null)
-            return new SignInResult { ErrorType = "UserNotFound" };
+            return new SignInResult { ErrorCode = ErrorCodes.UserNotFound };
 
         var hashPassword = _hashService.Generate(request.ProvidedPassword);
         if (!string.Equals(user.PasswordHash, hashPassword))
-            return new SignInResult { ErrorType = "InvalidPassword" };
+            return new SignInResult { ErrorCode = ErrorCodes.InvalidPassword };
 
         var userRole = await _dataAccess.GetUserRole(user.Id, cancellationToken);
         var role = await _dataAccess.GetRole(userRole.RoleId, cancellationToken);
-        
+
         var bearerToken = _tokenService.GenerateBearerToken(user, role);
         return new SignInResult { AcessToken = bearerToken };
     }
