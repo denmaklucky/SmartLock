@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Model.Models.Entities;
 
-public class UserRole
+public class UserRole : IEntityBase
 {
     [Required]
     public Guid UserId { get; set; }
@@ -15,4 +15,7 @@ public class UserRole
     
     [ForeignKey(nameof(RoleId))]
     public Role Role { get; set; }
+
+    [Key]
+    public Guid Id { get; set; }
 }

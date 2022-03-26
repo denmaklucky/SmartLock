@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Model.Models.Entities;
 
-public class UserLock
+public class UserLock : IEntityBase
 {
     [Required]
     public Guid UserId { get; set; }
@@ -15,4 +15,7 @@ public class UserLock
     
     [ForeignKey(nameof(LockId))]
     public Lock Lock { get; set; }
+
+    [Key]
+    public Guid Id { get; set; }
 }

@@ -1,18 +1,44 @@
+using System.Text;
 using Domain;
+using Domain.Options;
 using Domain.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Model;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(behaviorOptions => behaviorOptions.SuppressModelStateInvalidFilter = true)
     .AddNewtonsoftJson();
-builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite("Data Source = SmartLock.db"));
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("SQLiteFile")));
 builder.Services.AddScoped<IDataAccess, DataAccess>();
 builder.Services.AddMediatR(typeof(MediatREntryPoint).Assembly);
 builder.Services.AddScoped<IHashService, HashService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+
+var tokenOptions = builder.Configuration .GetSection(TokenOptions.SectionName);
+
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.ClaimsIssuer = tokenOptions["Issuer"];
+        options.RequireHttpsMetadata = false;
+        options.Audience = tokenOptions["Audience"];
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = tokenOptions["Issuer"],
+            ValidateAudience = true,
+            ValidAudience = tokenOptions["Audience"],
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenOptions["ClientSecret"])),
+            ValidateLifetime = false
+        };
+    });
+
+builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection(TokenOptions.SectionName));
 
 var app = builder.Build();
 app.MapDefaultControllerRoute();

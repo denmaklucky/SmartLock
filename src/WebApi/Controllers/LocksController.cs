@@ -1,11 +1,13 @@
 ﻿using Domain.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Filters;
 using WebApi.Requests;
 
 namespace WebApi.Controllers;
 
+[Authorize(Roles = "admin")]
 [ApiController, Route("api/[controller]")]
 public class LocksController : ControllerBase
 {
@@ -23,6 +25,7 @@ public class LocksController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles = "admin,user")]
     [HttpPost, ValidateRequest, Route("{lockId}/open")]
     public async Task<IActionResult> Open(CancellationToken token)
     {

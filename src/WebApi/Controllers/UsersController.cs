@@ -1,5 +1,6 @@
 ﻿using Domain.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Filters;
 using WebApi.Requests;
@@ -7,6 +8,7 @@ using WebApi.Responses;
 
 namespace WebApi.Controllers;
 
+[AllowAnonymous]
 [ApiController, Route("api/[controller]")]
 public class UsersController : ControllerBase
 {

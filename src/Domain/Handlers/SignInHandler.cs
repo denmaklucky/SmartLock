@@ -29,7 +29,10 @@ public class SignInHandler : IRequestHandler<SignInCommand, SignInResult>
         if (!string.Equals(user.PasswordHash, hashPassword))
             return new SignInResult { ErrorType = "InvalidPassword" };
 
-        var bearerToken = _tokenService.GenerateBearerToken();
+        var userRole = await _dataAccess.GetUserRole(user.Id, cancellationToken);
+        var role = await _dataAccess.GetRole(userRole.RoleId, cancellationToken);
+        
+        var bearerToken = _tokenService.GenerateBearerToken(user, role);
         return new SignInResult { AcessToken = bearerToken };
     }
 }
