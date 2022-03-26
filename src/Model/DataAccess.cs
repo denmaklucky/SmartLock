@@ -1,16 +1,27 @@
-﻿namespace Model;
+﻿using Microsoft.EntityFrameworkCore;
+using Model.Models.Entities;
+
+namespace Model;
+
+public interface IDataAccess
+{
+    Task<User> GetUser(string userName, CancellationToken token);
+}
 
 public class DataAccess : IDataAccess, IDisposable
 {
-    private readonly ApplicationContext _applicationContext;
+    private readonly ApplicationContext _context;
 
-    public DataAccess(ApplicationContext applicationContext)
+    public DataAccess(ApplicationContext context)
     {
-        _applicationContext = applicationContext;
+        _context = context;
     }
+
+    public Task<User> GetUser(string userName, CancellationToken token)
+        => _context.Users.FirstOrDefaultAsync(u => u.Name == userName, token);
 
     public void Dispose()
     {
-        _applicationContext?.Dispose();
+        _context?.Dispose();
     }
 }

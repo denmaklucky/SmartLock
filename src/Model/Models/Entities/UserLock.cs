@@ -13,6 +13,6 @@ public class UserLock
     [ForeignKey(nameof(UserId))]
     public User User { get; set; }
     
-    [ForeignKey(nameof(Lock))]
+    [ForeignKey(nameof(LockId))]
     public Lock Lock { get; set; }
 }

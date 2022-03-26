@@ -1,0 +1,35 @@
+﻿using Domain.Commands;
+using Domain.Results;
+using Domain.Services;
+using MediatR;
+using Model;
+
+namespace Domain.Handlers;
+
+public class SignInHandler : IRequestHandler<SignInCommand, SignInResult>
+{
+    private readonly IDataAccess _dataAccess;
+    private readonly IHashService _hashService;
+    private readonly ITokenService _tokenService;
+
+    public SignInHandler(IDataAccess dataAccess, IHashService hashService, ITokenService tokenService)
+    {
+        _dataAccess = dataAccess;
+        _hashService = hashService;
+        _tokenService = tokenService;
+    }
+
+    public async Task<SignInResult> Handle(SignInCommand request, CancellationToken cancellationToken)
+    {
+        var user = await _dataAccess.GetUser(request.Login, cancellationToken);
+        if (user == null)
+            return new SignInResult { ErrorType = "UserNotFound" };
+
+        var hashPassword = _hashService.Generate(request.ProvidedPassword);
+        if (!string.Equals(user.PasswordHash, hashPassword))
+            return new SignInResult { ErrorType = "InvalidPassword" };
+
+        var bearerToken = _tokenService.GenerateBearerToken();
+        return new SignInResult { AcessToken = bearerToken };
+    }
+}

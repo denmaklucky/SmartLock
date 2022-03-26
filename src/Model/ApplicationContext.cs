@@ -8,6 +8,13 @@ public class ApplicationContext : DbContext
     public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options)
     {
+        Database.EnsureCreated();
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<UserLock>().HasNoKey();
+        modelBuilder.Entity<UserRole>().HasNoKey();
     }
 
     public DbSet<User> Users { get; set; }
