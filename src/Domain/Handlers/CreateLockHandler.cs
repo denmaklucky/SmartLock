@@ -1,4 +1,6 @@
 ﻿using Domain.Commands;
+using Domain.Exceptions;
+using Domain.Queries;
 using Domain.Results;
 using FluentValidation;
 using MediatR;
@@ -11,11 +13,13 @@ namespace Domain.Handlers;
 public class CreateLockHandler : IRequestHandler<CreateLockCommand, CreateLockResult>
 {
     private readonly IDataAccess _dataAccess;
+    private readonly IMediator _mediator;
     private readonly IValidator<CreateLockCommand> _validator;
 
-    public CreateLockHandler(IDataAccess dataAccess, IValidator<CreateLockCommand> validator)
+    public CreateLockHandler(IDataAccess dataAccess, IMediator mediator, IValidator<CreateLockCommand> validator)
     {
         _dataAccess = dataAccess;
+        _mediator = mediator;
         _validator = validator;
     }
 
@@ -24,17 +28,29 @@ public class CreateLockHandler : IRequestHandler<CreateLockCommand, CreateLockRe
         var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
 
         if (!validatorResult.IsValid)
-            return new CreateLockResult { ErrorCode = ErrorCodes.InvalidRequest, ValidatorErrors = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray()};
+            return new CreateLockResult { ErrorCode = ErrorCodes.InvalidRequest, ValidatorErrors = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray() };
 
-        //Create a lock
-        var @lock = new Lock
+        var getUserResult = await _mediator.Send(new GetUserQuery(request.UserId), cancellationToken);
+
+        if (!getUserResult.IsSuccess)
+            throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.UserId}");
+        
+        var newLock = new Lock
         {
             State = LockStateEnum.Online,
             Title = request.Title,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = request.UserId
         };
-        
+
+        var @lock = await _dataAccess.AddLock(newLock, cancellationToken);
+
+        var newSetting = new LockSetting
+        {
+            LockId = @lock.Id,
+            CreatedBy = request.UserId,
+            CreatedOn = DateTime.UtcNow
+        };
 
         //Create a default settings
         return new CreateLockResult();

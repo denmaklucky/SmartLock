@@ -40,7 +40,7 @@ public class LocksController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateLockRequest request, CancellationToken token)
     {
         var result = await _mediator.Send(new CreateLockCommand(request.Title, request.ActivationKey, User.GetUserId()), token);
-        return result.IsSuccess ? Ok(result) : BadRequest(new ErrorResponse(result.ErrorCode, result.ErrorCode));
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.ValidatorErrors));
     }
 
     [Authorize(Roles = "admin")]

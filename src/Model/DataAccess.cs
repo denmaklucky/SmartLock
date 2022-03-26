@@ -10,6 +10,7 @@ public interface IDataAccess
     Task<Role> GetRole(Guid roleId, CancellationToken token);
     Task<Lock> AddLock(Lock @lock, CancellationToken token);
     Task<LockSetting> AddSetting(LockSetting lockSetting, CancellationToken token);
+    Task<User> GetUserById(Guid userId, CancellationToken token);
 }
 
 public class DataAccess : IDataAccess, IDisposable
@@ -24,6 +25,9 @@ public class DataAccess : IDataAccess, IDisposable
     public Task<User> GetUser(string userName, CancellationToken token)
         => _context.Users.FirstOrDefaultAsync(u => u.UserName == userName, token);
 
+    public Task<User> GetUserById(Guid userId, CancellationToken token)
+        => _context.Users.FirstOrDefaultAsync(u => u.Id == userId, token);
+
     public Task<UserRole> GetUserRole(Guid userId, CancellationToken token)
         => _context.UserRoles.FirstOrDefaultAsync(ur => ur.UserId == userId, token);
 
@@ -32,10 +36,10 @@ public class DataAccess : IDataAccess, IDisposable
 
     public async Task<Lock> AddLock(Lock @lock, CancellationToken token)
     {
-       var entityLock = await _context.Locks.AddAsync(@lock, token);
-       await _context.SaveChangesAsync(token);
-       
-       return entityLock.Entity;
+        var entityLock = await _context.Locks.AddAsync(@lock, token);
+        await _context.SaveChangesAsync(token);
+
+        return entityLock.Entity;
     }
 
     public async Task<LockSetting> AddSetting(LockSetting lockSetting, CancellationToken token)
