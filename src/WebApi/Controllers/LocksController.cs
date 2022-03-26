@@ -7,7 +7,6 @@ using WebApi.Requests;
 
 namespace WebApi.Controllers;
 
-[Authorize(Roles = "admin")]
 [ApiController, Route("api/[controller]")]
 public class LocksController : ControllerBase
 {
@@ -19,6 +18,7 @@ public class LocksController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> GetLocks()
     {
         var result = await _mediator.Send(new GetLocksQuery());
@@ -32,24 +32,28 @@ public class LocksController : ControllerBase
         return Ok();
     }
 
+    [Authorize(Roles = "admin")]
     [HttpPost, ValidateRequest, Route("create")]
     public async Task<IActionResult> Create([FromBody] CreateLockRequest request, CancellationToken token)
     {
         return Ok();
     }
 
+    [Authorize(Roles = "admin")]
     [HttpPatch, ValidateRequest, Route("{lockId}/update")]
     public async Task<IActionResult> PartialUpdate([FromBody] CreateLockRequest request, CancellationToken token)
     {
         return Ok();
     }
 
+    [Authorize(Roles = "admin")]
     [HttpPut, ValidateRequest, Route("{lockId}/update")]
     public async Task<IActionResult> Update([FromBody] CreateLockRequest request, CancellationToken token)
     {
         return Ok();
     }
 
+    [Authorize(Roles = "admin")]
     [HttpDelete, ValidateRequest, Route("{lockId}/delete")]
     public async Task<IActionResult> Delete(string lockId, CancellationToken token)
     {

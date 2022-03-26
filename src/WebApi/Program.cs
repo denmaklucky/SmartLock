@@ -42,5 +42,7 @@ builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection(TokenO
 
 var app = builder.Build();
 app.MapDefaultControllerRoute();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
