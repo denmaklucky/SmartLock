@@ -1,11 +1,11 @@
-﻿using Domain.Dto;
-using Domain.Queries;
+﻿using Domain.Queries;
+using Domain.Results;
 using MediatR;
 using Model;
 
 namespace Domain.Handlers;
 
-public class GetLocksHandler : IRequestHandler<GetLocksQuery, List<LockDto>>
+public class GetLocksHandler : IRequestHandler<GetLocksQuery, GetLocksResult>
 {
     private readonly IDataAccess _dataAccess;
 
@@ -14,8 +14,8 @@ public class GetLocksHandler : IRequestHandler<GetLocksQuery, List<LockDto>>
         _dataAccess = dataAccess;
     }
     
-    public Task<List<LockDto>> Handle(GetLocksQuery request, CancellationToken cancellationToken)
+    public Task<GetLocksResult> Handle(GetLocksQuery request, CancellationToken cancellationToken)
     {
-        return Task.FromResult(new List<LockDto> { new LockDto { Name = "SmartLocker" } });
+        return Task.FromResult(new GetLocksResult());
     }
 }

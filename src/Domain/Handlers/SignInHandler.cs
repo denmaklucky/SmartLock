@@ -22,10 +22,12 @@ public class SignInHandler : IRequestHandler<SignInCommand, SignInResult>
     public async Task<SignInResult> Handle(SignInCommand request, CancellationToken cancellationToken)
     {
         var user = await _dataAccess.GetUser(request.Login, cancellationToken);
+        
         if (user == null)
             return new SignInResult { ErrorCode = ErrorCodes.UserNotFound };
 
         var hashPassword = _hashService.Generate(request.ProvidedPassword);
+        
         if (!string.Equals(user.PasswordHash, hashPassword))
             return new SignInResult { ErrorCode = ErrorCodes.InvalidPassword };
 

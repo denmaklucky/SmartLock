@@ -21,11 +21,11 @@ public class LocksController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin,user")]
     public async Task<IActionResult> GetLocks()
     {
-        var result = await _mediator.Send(new GetLocksQuery());
-        return Ok(result);
+        var result = await _mediator.Send(new GetLocksQuery(User.GetUserId()));
+        return result.IsSuccess ? Ok(result) : BadRequest(new ErrorResponse(result.ErrorCode));
     }
 
     [Authorize(Roles = "admin,user")]
