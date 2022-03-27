@@ -42,7 +42,6 @@ public class DeleteLockHandler : IRequestHandler<DeleteLockCommand, DeleteLockRe
             throw new LogicException(ErrorCodes.InternalError, $"Couldn't find a lock by following `lockId` {request.LockId}");
 
         @lock.IsDeleted = true;
-        @lock.State = LockStateEnum.Offline;
         @lock.ModifiedBy = request.UserId;
         @lock.ModifiedOn = DateTime.UtcNow;
 

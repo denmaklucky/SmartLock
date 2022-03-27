@@ -40,6 +40,8 @@ public class AssignKeyToUserHandler : IRequestHandler<AssignKeyToUserCommand, As
         if (!getAssignUserResult.IsSuccess)
             return new AssignKeyToUserResult { ErrorCode = ErrorCodes.NotFound, Messages = new[] { $"Couldn't find an user for assign with id `{assignToId}`" } };
         
-        await _dataAccess.AddKeyLock(new KeyLock { KeyId = createdKey.Id, LockId = lockId }, cancellationToken);
+        //await _dataAccess.AddKeyLock(new KeyLock { KeyId = createdKey.Id, LockId = lockId }, cancellationToken);
+
+        return new AssignKeyToUserResult();
     }
 }

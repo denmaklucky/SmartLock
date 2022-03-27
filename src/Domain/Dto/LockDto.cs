@@ -8,11 +8,8 @@ public class LockDto
 {
     public Guid Id { get; set; }
     public string Title { get; set; }
-    [JsonConverter(typeof(StringEnumConverter))]
-    public LockStateEnum State { get; set; }
     public bool IsDeleted { get; set; }
     public LockSettingDto Setting { get; set; }
-    public KeyDto[] Keys { get; set; }
 }
 
 public class LockSettingDto

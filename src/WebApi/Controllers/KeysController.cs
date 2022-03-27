@@ -25,10 +25,4 @@ public class KeysController : ControllerBase
         var result = await _mediator.Send(new CreateKeyCommand(User.GetUserId(), request.LockId, request.Type, request.ExpiredAt), token);
         return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
-
-    [HttpPost, Route("{keyId}/assign")]
-    public async Task<IActionResult> AssignKey([FromBody]AssignKeyRequest request, CancellationToken token)
-    {
-        
-    }
 }

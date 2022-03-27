@@ -1,5 +1,4 @@
-﻿using Domain.Commands.Keys;
-using Domain.Commands.Locks;
+﻿using Domain.Commands.Locks;
 using Domain.Dto;
 using Domain.Exceptions;
 using Domain.Queries;
@@ -39,7 +38,6 @@ public class ActivateLockHandler : IRequestHandler<ActivateLockCommand, CreateLo
 
         var newLock = new Lock
         {
-            State = LockStateEnum.WithoutKey,
             ActivationKey = request.ActivationKey,
             Title = request.Title,
             CreatedOn = DateTime.UtcNow,
@@ -58,30 +56,20 @@ public class ActivateLockHandler : IRequestHandler<ActivateLockCommand, CreateLo
 
         var lockSetting = await _dataAccess.AddSetting(newSetting, cancellationToken);
 
-        var userLock = new UserLock
+        var accessLock = new AccessLock
         {
             LockId = createdLock.Id,
-            UserId = request.UserId
+            AccessId = request.UserId,
+            Type = AccessTypeEnum.User 
         };
 
-        await _dataAccess.AddUserLock(userLock, cancellationToken);
-
-        var createKeyResult = await _mediator.Send(new CreateKeyCommand(request.UserId, createdLock.Id.ToString(), KeyTypeEnum.eKey, DateTime.UtcNow.AddMinutes(Constants.DefaultTimeExistingOfEKey)), cancellationToken);
-
-        var key = createKeyResult.Data;
-        if (createKeyResult.IsSuccess)
-        {
-            createdLock.State = LockStateEnum.Online;
-            _ = await _dataAccess.UpdateLock(createdLock, cancellationToken);
-        }
-        //TODO: Add logs
+        await _dataAccess.AddAccessLock(accessLock, cancellationToken);
 
         return new CreateLockResult
         {
             Data = new LockDto
             {
                 Id = createdLock.Id,
-                State = createdLock.State,
                 Title = createdLock.Title,
                 IsDeleted = createdLock.IsDeleted,
                 Setting = new LockSettingDto
@@ -89,8 +77,7 @@ public class ActivateLockHandler : IRequestHandler<ActivateLockCommand, CreateLo
                     Mode = lockSetting.Mode,
                     EndOpenTime = lockSetting.EndOpenTime,
                     StartOpenTime = lockSetting.StartOpenTime
-                },
-                Keys = new[] { key }
+                }
             }
         };
     }

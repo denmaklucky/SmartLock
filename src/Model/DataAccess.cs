@@ -19,6 +19,8 @@ public interface IDataAccess
     Task<Key> AddKey(Key key, CancellationToken token);
     Task AddKeyLock(KeyLock keyLock, CancellationToken token);
     Task<KeyLock> GetKeyLock(Guid keyId, Guid lockId, CancellationToken token);
+    Task AddAccessLock(AccessLock accessLock, CancellationToken token);
+    Task GetAccessLock(Guid accessId, CancellationToken token);
 }
 
 public class DataAccess : IDataAccess, IDisposable
@@ -105,6 +107,15 @@ public class DataAccess : IDataAccess, IDisposable
 
     public Task<KeyLock> GetKeyLock(Guid keyId, Guid lockId, CancellationToken token)
         => _context.KeyLocks.FirstOrDefaultAsync(kl => kl.KeyId == keyId && kl.LockId == lockId, token);
+    
+    public async Task AddAccessLock(AccessLock accessLock, CancellationToken token)
+    {
+        await _context.AccessLocks.AddAsync(accessLock, token);
+        await _context.SaveChangesAsync(token);
+    }
+
+    public Task GetAccessLock(Guid accessId, CancellationToken token)
+        => _context.AccessLocks.FirstOrDefaultAsync(al => al.AccessId == accessId, token);
 
     public void Dispose()
         => _context?.Dispose();

@@ -1,13 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Model.Enums;
 
 namespace Model.Models.Entities;
 
 public class Lock : EntityModifiedBase
 {
-    [Required]
-    public LockStateEnum State { get; set; }
     
     [Required]
     public string ActivationKey { get; set; }

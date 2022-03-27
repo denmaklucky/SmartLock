@@ -42,8 +42,8 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
         if (@lock == null)
             return new OpenLockResult { ErrorCode = ErrorCodes.NotFound, Messages = new[] { $"Couldn't find a lock by following `lockId` {request.LockId}" } };
 
-        if (@lock.IsDeleted || @lock.State == LockStateEnum.Offline)
-            throw new LogicException(ErrorCodes.InternalError, $"The lock {@lock.Id} is deleted or offline");
+        if (@lock.IsDeleted)
+            throw new LogicException(ErrorCodes.InternalError, $"The lock {@lock.Id} is deleted");
 
         var keyId = Guid.Parse(request.KeyId);
         var checkKeyResult = await _mediator.Send(new CheckKeyCommand(keyId, @lock.Id), cancellationToken);
@@ -54,7 +54,7 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
         @lock.OpeningHistories.Add(new OpeningHistory
         {
             LockId = @lock.Id,
-            KeyId = keyId,
+            AccessId = keyId,
             CreatedBy = request.UserId,
             CreatedOn = DateTime.UtcNow
         });
