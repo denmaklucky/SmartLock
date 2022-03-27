@@ -13,6 +13,6 @@ public class LockDto
 public class LockSettingDto
 {
     public LockModeEnum Mode { get; set; }
-    public TimeOnly? StartTime { get; set; }
-    public TimeOnly? EndTime { get; set; }
+    public TimeOnly? StartOpenTime { get; set; }
+    public TimeOnly? EndOpenTime { get; set; }
 }

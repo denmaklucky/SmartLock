@@ -30,7 +30,7 @@ public class LocksController : ControllerBase
 
     [Authorize(Roles = "admin,user")]
     [HttpPost, ValidateRequest, Route("{lockId}/open")]
-    public async Task<IActionResult> Open(string lockId, [FromBody]OpenLockRequest request, CancellationToken token)
+    public async Task<IActionResult> Open(string lockId, [FromBody] OpenLockRequest request, CancellationToken token)
     {
         var result = await _mediator.Send(new OpenLockCommand(lockId, request.KeyId, User.GetUserId()), token);
         return result.IsSuccess ? Ok(result) : BadRequest(new ErrorResponse(result.ErrorCode));
@@ -46,23 +46,17 @@ public class LocksController : ControllerBase
 
     [Authorize(Roles = "admin")]
     [HttpPatch, ValidateRequest, Route("{lockId}/update")]
-    public async Task<IActionResult> PartialUpdate([FromBody] CreateLockRequest request, CancellationToken token)
+    public async Task<IActionResult> PartialUpdate(string lockId, [FromBody] UpdateLockRequest request, CancellationToken token)
     {
-        return Ok();
-    }
-
-    [Authorize(Roles = "admin")]
-    [HttpPut, ValidateRequest, Route("{lockId}/update")]
-    public async Task<IActionResult> Update([FromBody] CreateLockRequest request, CancellationToken token)
-    {
-        return Ok();
+        var result = await _mediator.Send(new UpdateLockCommand(User.GetUserId(), lockId, request.Title, request.Mode, request.StartOpenTime, request.EndOpenTime), token);
+        return result.IsSuccess ? Ok(result) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 
     [Authorize(Roles = "admin")]
     [HttpDelete, ValidateRequest, Route("{lockId}/delete")]
-    public async Task<IActionResult> Delete(Guid lockId, CancellationToken token)
+    public async Task<IActionResult> Delete(string lockId, CancellationToken token)
     {
-        var result = await _mediator.Send(new DeleteLockCommand(lockId, User.GetUserId()));
+        var result = await _mediator.Send(new DeleteLockCommand(lockId, User.GetUserId()), token);
         return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 }

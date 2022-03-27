@@ -35,7 +35,8 @@ public class DeleteLockHandler : IRequestHandler<DeleteLockCommand, DeleteLockRe
         if (!getUserResult.IsSuccess)
             throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.UserId}");
 
-        var @lock = await _dataAccess.GetLock(request.LockId, cancellationToken);
+        var lockId = Guid.Parse(request.LockId);
+        var @lock = await _dataAccess.GetLock(lockId, cancellationToken);
 
         if (@lock == null)
             throw new LogicException(ErrorCodes.InternalError, $"Couldn't find a lock by following `lockId` {request.LockId}");

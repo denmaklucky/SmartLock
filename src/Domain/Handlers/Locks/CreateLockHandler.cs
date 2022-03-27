@@ -67,8 +67,8 @@ public class CreateLockHandler : IRequestHandler<CreateLockCommand, CreateLockRe
                 Setting = new LockSettingDto
                 {
                     Mode = lockSetting.Mode,
-                    EndTime = lockSetting.EndTime,
-                    StartTime = lockSetting.StartTime
+                    EndOpenTime = lockSetting.EndOpenTime,
+                    StartOpenTime = lockSetting.StartOpenTime
                 }
             }
         };

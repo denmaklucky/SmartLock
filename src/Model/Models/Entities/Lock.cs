@@ -17,7 +17,7 @@ public class Lock : EntityModifiedBase
     public string Title { get; set; }
     
     [InverseProperty(nameof(Lock))]
-    public LockSetting SettingId { get; set; }
+    public LockSetting Setting { get; set; }
     
     [InverseProperty(nameof(Lock))]
     public virtual ICollection<OpeningHistory> OpeningHistories { get; set; } = new List<OpeningHistory>();
