@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Domain.Commands.Keys;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Extensions;
 using WebApi.Requests;
+using WebApi.Responses;
 
 namespace WebApi.Controllers;
 
@@ -8,9 +12,23 @@ namespace WebApi.Controllers;
 [ApiController, Route("api/[controller]")]
 public class KeysController : ControllerBase
 {
-    [HttpPost]
-    public IActionResult CreateKey([FromBody]CreateKeyRequest request, CancellationToken token)
+    private readonly IMediator _mediator;
+
+    public KeysController(IMediator mediator)
     {
-        return Ok("");
+        _mediator = mediator;
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> CreateKey([FromBody]CreateKeyRequest request, CancellationToken token)
+    {
+        var result = await _mediator.Send(new CreateKeyCommand(User.GetUserId(), request.LockId, request.Type, request.ExpiredAt), token);
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
+    }
+
+    [HttpPost, Route("{keyId}/assign")]
+    public async Task<IActionResult> AssignKey([FromBody]AssignKeyRequest request, CancellationToken token)
+    {
+        
     }
 }
