@@ -1,9 +1,9 @@
-﻿using Domain.Queries;
-using Domain.Results;
+﻿using Domain.Queries.Locks;
+using Domain.Results.Locks;
 using MediatR;
 using Model;
 
-namespace Domain.Handlers;
+namespace Domain.Handlers.Locks;
 
 public class GetLocksHandler : IRequestHandler<GetLocksQuery, GetLocksResult>
 {

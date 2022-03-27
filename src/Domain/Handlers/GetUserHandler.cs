@@ -19,7 +19,7 @@ public class GetUserHandler : IRequestHandler<GetUserQuery, GetUserResult>
         var user = await _dataAccess.GetUserById(request.UserId, cancellationToken);
 
         return user == null 
-            ? new GetUserResult { ErrorCode = ErrorCodes.UserNotFound } 
+            ? new GetUserResult { ErrorCode = ErrorCodes.NotFound } 
             : new GetUserResult { UserId = user.Id, UserName = user.UserName };
     }
 }

@@ -13,6 +13,7 @@ public interface IDataAccess
     Task<User> GetUserById(Guid userId, CancellationToken token);
     Task<Lock> UpdateLock(Lock @lock, CancellationToken token);
     Task<Lock> GetLock(Guid lockId, CancellationToken token);
+    Task<Key> GetKey(Guid keyId, CancellationToken token);
 }
 
 public class DataAccess : IDataAccess, IDisposable
@@ -54,7 +55,7 @@ public class DataAccess : IDataAccess, IDisposable
 
     public async Task<Lock> UpdateLock(Lock @lock, CancellationToken token)
     {
-        var entityLock =  _context.Locks.Update(@lock);
+        var entityLock = _context.Locks.Update(@lock);
         await _context.SaveChangesAsync(token);
 
         return entityLock.Entity;
@@ -62,6 +63,9 @@ public class DataAccess : IDataAccess, IDisposable
 
     public Task<Lock> GetLock(Guid lockId, CancellationToken token)
         => _context.Locks.FirstOrDefaultAsync(l => l.Id == lockId, token);
+
+    public Task<Key> GetKey(Guid keyId, CancellationToken token)
+        => _context.Keys.FirstOrDefaultAsync(k => k.Id == keyId, token);
 
     public void Dispose()
     {

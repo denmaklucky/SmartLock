@@ -24,7 +24,7 @@ public class SignInHandler : IRequestHandler<SignInCommand, SignInResult>
         var user = await _dataAccess.GetUser(request.Login, cancellationToken);
         
         if (user == null)
-            return new SignInResult { ErrorCode = ErrorCodes.UserNotFound };
+            return new SignInResult { ErrorCode = ErrorCodes.NotFound };
 
         var hashPassword = _hashService.Generate(request.ProvidedPassword);
         

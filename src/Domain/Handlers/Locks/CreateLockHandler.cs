@@ -1,15 +1,15 @@
-﻿using Domain.Commands;
+﻿using Domain.Commands.Locks;
 using Domain.Dto;
 using Domain.Exceptions;
 using Domain.Queries;
-using Domain.Results;
+using Domain.Results.Locks;
 using FluentValidation;
 using MediatR;
 using Model;
 using Model.Enums;
 using Model.Models.Entities;
 
-namespace Domain.Handlers;
+namespace Domain.Handlers.Locks;
 
 public class CreateLockHandler : IRequestHandler<CreateLockCommand, CreateLockResult>
 {

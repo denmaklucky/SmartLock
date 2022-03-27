@@ -1,14 +1,14 @@
-﻿using Domain.Commands;
+﻿using Domain.Commands.Locks;
 using Domain.Dto;
 using Domain.Exceptions;
 using Domain.Queries;
-using Domain.Results;
+using Domain.Results.Locks;
 using FluentValidation;
 using MediatR;
 using Model;
 using Model.Enums;
 
-namespace Domain.Handlers;
+namespace Domain.Handlers.Locks;
 
 public class DeleteLockHandler : IRequestHandler<DeleteLockCommand, DeleteLockResult>
 {

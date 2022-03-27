@@ -7,6 +7,9 @@ public class OpeningHistory : EntityBase
 {
     [Required]
     public Guid LockId { get; set; }
+    
+    [Required]
+    public Guid KeyId { get; set; }
 
     [ForeignKey(nameof(LockId))]
     public virtual Lock Lock { get; set; }

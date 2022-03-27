@@ -1,6 +1,6 @@
 ﻿using Domain.Dto;
 
-namespace Domain.Results;
+namespace Domain.Results.Locks;
 
 public class CreateLockResult : BaseResult
 {

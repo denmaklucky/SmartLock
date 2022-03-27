@@ -1,5 +1,7 @@
 ﻿using Domain.Commands;
+using Domain.Commands.Locks;
 using Domain.Queries;
+using Domain.Queries.Locks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

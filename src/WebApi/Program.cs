@@ -1,9 +1,11 @@
 using System.Text;
 using Domain;
 using Domain.Commands;
+using Domain.Commands.Locks;
 using Domain.Options;
 using Domain.Services;
 using Domain.Validators;
+using Domain.Validators.Locks;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

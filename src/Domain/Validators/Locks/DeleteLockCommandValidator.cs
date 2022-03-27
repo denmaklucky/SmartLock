@@ -1,7 +1,7 @@
-﻿using Domain.Commands;
+﻿using Domain.Commands.Locks;
 using FluentValidation;
 
-namespace Domain.Validators;
+namespace Domain.Validators.Locks;
 
 public class DeleteLockCommandValidator : AbstractValidator<DeleteLockCommand>
 {

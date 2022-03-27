@@ -1,6 +1,6 @@
-﻿using Domain.Results;
+﻿using Domain.Results.Locks;
 using MediatR;
 
-namespace Domain.Commands;
+namespace Domain.Commands.Locks;
 
 public record DeleteLockCommand(Guid LockId, Guid UserId) : IRequest<DeleteLockResult>;
