@@ -30,7 +30,7 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
         var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
 
         if (!validatorResult.IsValid)
-            return new OpenLockResult { ErrorCode = ErrorCodes.InvalidRequest, ValidatorErrors = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray() };
+            return new OpenLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray() };
 
         var getUserResult = await _mediator.Send(new GetUserQuery(request.UserId), cancellationToken);
 
@@ -40,7 +40,7 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
         var @lock = await _dataAccess.GetLock(Guid.Parse(request.LockId), cancellationToken);
 
         if (@lock == null)
-            return new OpenLockResult { ErrorCode = ErrorCodes.NotFound, ValidatorErrors = new[] { $"Couldn't find a lock by following `lockId` {request.LockId}" } };
+            return new OpenLockResult { ErrorCode = ErrorCodes.NotFound, Messages = new[] { $"Couldn't find a lock by following `lockId` {request.LockId}" } };
 
         if (@lock.IsDeleted || @lock.State == LockStateEnum.Offline)
             throw new LogicException(ErrorCodes.InternalError, $"The lock {@lock.Id} is deleted or offline");
@@ -49,7 +49,7 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
         var checkKeyResult = await _mediator.Send(new CheckKeyCommand(keyId), cancellationToken);
 
         if (!checkKeyResult.IsSuccess)
-            return new OpenLockResult { ErrorCode = ErrorCodes.InvalidRequest, ValidatorErrors = new []{$"Key with id {keyId} is not valid. Please try different one."}};
+            return new OpenLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new []{$"Key with id {keyId} is not valid. Please try different one."}};
         
         @lock.OpeningHistories.Add(new OpeningHistory
         {

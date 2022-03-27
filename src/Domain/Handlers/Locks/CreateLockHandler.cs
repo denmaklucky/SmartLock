@@ -29,7 +29,7 @@ public class CreateLockHandler : IRequestHandler<CreateLockCommand, CreateLockRe
         var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
 
         if (!validatorResult.IsValid)
-            return new CreateLockResult { ErrorCode = ErrorCodes.InvalidRequest, ValidatorErrors = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray() };
+            return new CreateLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray() };
 
         var getUserResult = await _mediator.Send(new GetUserQuery(request.UserId), cancellationToken);
 

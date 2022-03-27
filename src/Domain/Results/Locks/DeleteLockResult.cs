@@ -5,5 +5,4 @@ namespace Domain.Results.Locks;
 public class DeleteLockResult : BaseResult
 {
     public DeleteLockDto Data { get; set; }
-    public string[] ValidatorErrors { get; set; }
 }

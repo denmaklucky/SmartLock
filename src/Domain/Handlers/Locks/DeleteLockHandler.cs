@@ -28,7 +28,7 @@ public class DeleteLockHandler : IRequestHandler<DeleteLockCommand, DeleteLockRe
         var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
 
         if (!validatorResult.IsValid)
-            return new DeleteLockResult { ErrorCode = ErrorCodes.InvalidRequest, ValidatorErrors = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray() };
+            return new DeleteLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray() };
 
         var getUserResult = await _mediator.Send(new GetUserQuery(request.UserId), cancellationToken);
 

@@ -1,6 +1,4 @@
-﻿using Domain.Commands;
-using Domain.Commands.Locks;
-using Domain.Queries;
+﻿using Domain.Commands.Locks;
 using Domain.Queries.Locks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -43,7 +41,7 @@ public class LocksController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateLockRequest request, CancellationToken token)
     {
         var result = await _mediator.Send(new CreateLockCommand(request.Title, request.ActivationKey, User.GetUserId()), token);
-        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.ValidatorErrors));
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 
     [Authorize(Roles = "admin")]
@@ -65,6 +63,6 @@ public class LocksController : ControllerBase
     public async Task<IActionResult> Delete(Guid lockId, CancellationToken token)
     {
         var result = await _mediator.Send(new DeleteLockCommand(lockId, User.GetUserId()));
-        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.ValidatorErrors));
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 }
