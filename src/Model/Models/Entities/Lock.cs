@@ -10,9 +10,6 @@ public class Lock : EntityModifiedBase
     public LockStateEnum State { get; set; }
     
     [Required]
-    public LockTypeEnum Type { get; set; }
-    
-    [Required]
     public string ActivationKey { get; set; }
     
     public string Title { get; set; }

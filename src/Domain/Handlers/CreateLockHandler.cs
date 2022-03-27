@@ -1,4 +1,5 @@
 ﻿using Domain.Commands;
+using Domain.Dto;
 using Domain.Exceptions;
 using Domain.Queries;
 using Domain.Results;
@@ -48,11 +49,27 @@ public class CreateLockHandler : IRequestHandler<CreateLockCommand, CreateLockRe
         var newSetting = new LockSetting
         {
             LockId = @lock.Id,
+            Mode = LockModeEnum.Standard,
             CreatedBy = request.UserId,
             CreatedOn = DateTime.UtcNow
         };
 
-        //Create a default settings
-        return new CreateLockResult();
+        var lockSetting = await _dataAccess.AddSetting(newSetting, cancellationToken);
+
+        return new CreateLockResult
+        {
+            Data = new LockDto
+            {
+                Id = @lock.Id,
+                State = @lock.State,
+                Title = @lock.Title,
+                Setting = new LockSettingDto
+                {
+                    Mode = lockSetting.Mode,
+                    EndTime = lockSetting.EndTime,
+                    StartTime = lockSetting.StartTime
+                }
+            }
+        };
     }
 }
