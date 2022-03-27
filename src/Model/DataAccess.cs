@@ -14,6 +14,7 @@ public interface IDataAccess
     Task<Lock> UpdateLock(Lock @lock, CancellationToken token);
     Task<Lock> GetLock(Guid lockId, CancellationToken token);
     Task<Key> GetKey(Guid keyId, CancellationToken token);
+    Task<IEnumerable<Lock>> GetLockByUserId(Guid userId, CancellationToken token);
 }
 
 public class DataAccess : IDataAccess, IDisposable
@@ -66,6 +67,17 @@ public class DataAccess : IDataAccess, IDisposable
 
     public Task<Key> GetKey(Guid keyId, CancellationToken token)
         => _context.Keys.FirstOrDefaultAsync(k => k.Id == keyId, token);
+
+    public async Task<IEnumerable<Lock>> GetLockByUserId(Guid userId, CancellationToken token)
+    {
+        var query = 
+            from ul in _context.UserLocks
+            join l in _context.Locks on ul.LockId equals l.Id
+            where ul.UserId == userId
+            select l;
+        
+        return query;
+    }
 
     public void Dispose()
     {

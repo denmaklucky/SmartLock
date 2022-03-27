@@ -25,7 +25,7 @@ public class LocksController : ControllerBase
     public async Task<IActionResult> GetLocks()
     {
         var result = await _mediator.Send(new GetLocksQuery(User.GetUserId()));
-        return result.IsSuccess ? Ok(result) : BadRequest(new ErrorResponse(result.ErrorCode));
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode));
     }
 
     [Authorize(Roles = "admin,user")]
