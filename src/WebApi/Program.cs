@@ -46,7 +46,7 @@ builder.Services.AddAuthentication("Bearer")
 builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection(TokenOptions.SectionName));
 
 builder.Services.AddScoped<IValidator<GetLocksQuery>, GetLocksQueryValidator>();
-builder.Services.AddScoped<IValidator<CreateLockCommand>, CreateLockCommandValidator>();
+builder.Services.AddScoped<IValidator<ActivateLockCommand>, ActivateLockCommandValidator>();
 builder.Services.AddScoped<IValidator<DeleteLockCommand>, DeleteLockCommandValidator>();
 builder.Services.AddScoped<IValidator<OpenLockCommand>, OpenLockCommandValidator>();
 builder.Services.AddScoped<IValidator<UpdateLockCommand>, UpdateLockCommandValidator>();

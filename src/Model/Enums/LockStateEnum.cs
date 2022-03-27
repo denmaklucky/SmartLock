@@ -2,6 +2,7 @@
 
 public enum LockStateEnum
 {
+    WithoutKey,
     Online,
     Offline
 }

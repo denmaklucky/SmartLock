@@ -11,20 +11,20 @@ using Model.Models.Entities;
 
 namespace Domain.Handlers.Locks;
 
-public class CreateLockHandler : IRequestHandler<CreateLockCommand, CreateLockResult>
+public class ActivateLockHandler : IRequestHandler<ActivateLockCommand, CreateLockResult>
 {
     private readonly IDataAccess _dataAccess;
     private readonly IMediator _mediator;
-    private readonly IValidator<CreateLockCommand> _validator;
+    private readonly IValidator<ActivateLockCommand> _validator;
 
-    public CreateLockHandler(IDataAccess dataAccess, IMediator mediator, IValidator<CreateLockCommand> validator)
+    public ActivateLockHandler(IDataAccess dataAccess, IMediator mediator, IValidator<ActivateLockCommand> validator)
     {
         _dataAccess = dataAccess;
         _mediator = mediator;
         _validator = validator;
     }
 
-    public async Task<CreateLockResult> Handle(CreateLockCommand request, CancellationToken cancellationToken)
+    public async Task<CreateLockResult> Handle(ActivateLockCommand request, CancellationToken cancellationToken)
     {
         var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
 
@@ -35,10 +35,10 @@ public class CreateLockHandler : IRequestHandler<CreateLockCommand, CreateLockRe
 
         if (!getUserResult.IsSuccess)
             throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.UserId}");
-        
+
         var newLock = new Lock
         {
-            State = LockStateEnum.Online,
+            State = LockStateEnum.WithoutKey,
             ActivationKey = request.ActivationKey,
             Title = request.Title,
             CreatedOn = DateTime.UtcNow,
@@ -64,6 +64,7 @@ public class CreateLockHandler : IRequestHandler<CreateLockCommand, CreateLockRe
                 Id = @lock.Id,
                 State = @lock.State,
                 Title = @lock.Title,
+                IsDeleted = @lock.IsDeleted,
                 Setting = new LockSettingDto
                 {
                     Mode = lockSetting.Mode,

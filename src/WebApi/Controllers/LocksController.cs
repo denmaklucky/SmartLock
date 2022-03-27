@@ -33,14 +33,14 @@ public class LocksController : ControllerBase
     public async Task<IActionResult> Open(string lockId, [FromBody] OpenLockRequest request, CancellationToken token)
     {
         var result = await _mediator.Send(new OpenLockCommand(lockId, request.KeyId, User.GetUserId()), token);
-        return result.IsSuccess ? Ok(result) : BadRequest(new ErrorResponse(result.ErrorCode));
+        return result.IsSuccess ? Ok(result.Data ) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 
     [Authorize(Roles = "admin")]
-    [HttpPost, ValidateRequest, Route("create")]
-    public async Task<IActionResult> Create([FromBody] CreateLockRequest request, CancellationToken token)
+    [HttpPost, ValidateRequest, Route("activate")]
+    public async Task<IActionResult> Create([FromBody] ActivateLockRequest request, CancellationToken token)
     {
-        var result = await _mediator.Send(new CreateLockCommand(request.Title, request.ActivationKey, User.GetUserId()), token);
+        var result = await _mediator.Send(new ActivateLockCommand(request.Title, request.ActivationKey, User.GetUserId()), token);
         return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 

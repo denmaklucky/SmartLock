@@ -8,6 +8,9 @@ public class Key : EntityModifiedBase
     [Required]
     public KeyTypeEnum Type { get; set; }
     
+    [Required]
+    public Guid UserId { get; set; }
+    
     public bool IsDeleted { get; set; }
     
     public DateTime? ExpiredAt { get; set; }

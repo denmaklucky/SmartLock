@@ -42,6 +42,7 @@ public class GetLocksHandler : IRequestHandler<GetLocksQuery, GetLocksResult>
                 Id = l.Id,
                 State = l.State,
                 Title = l.Title,
+                IsDeleted = l.IsDeleted,
                 Setting = new LockSettingDto
                 {
                     Mode = l.Setting.Mode,
