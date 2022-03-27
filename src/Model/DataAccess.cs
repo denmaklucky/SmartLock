@@ -15,12 +15,9 @@ public interface IDataAccess
     Task<Lock> GetLock(Guid lockId, CancellationToken token);
     Task<Key> GetKey(Guid keyId, CancellationToken token);
     Task<IEnumerable<Lock>> GetLockByUserId(Guid userId, CancellationToken token);
-    Task AddUserLock(UserLock userLock, CancellationToken token);
     Task<Key> AddKey(Key key, CancellationToken token);
-    Task AddKeyLock(KeyLock keyLock, CancellationToken token);
-    Task<KeyLock> GetKeyLock(Guid keyId, Guid lockId, CancellationToken token);
     Task AddAccessLock(AccessLock accessLock, CancellationToken token);
-    Task GetAccessLock(Guid accessId, CancellationToken token);
+    Task<AccessLock> GetAccessLock(Guid accessId, Guid lockId, CancellationToken token);
 }
 
 public class DataAccess : IDataAccess, IDisposable
@@ -77,18 +74,12 @@ public class DataAccess : IDataAccess, IDisposable
     public async Task<IEnumerable<Lock>> GetLockByUserId(Guid userId, CancellationToken token)
     {
         var query =
-            from ul in _context.UserLocks
+            from ul in _context.AccessLocks
             join l in _context.Locks.Include(l => l.Setting) on ul.LockId equals l.Id
             where l.CreatedBy == userId
             select l;
 
         return query;
-    }
-
-    public async Task AddUserLock(UserLock userLock, CancellationToken token)
-    {
-        await _context.UserLocks.AddAsync(userLock, token);
-        await _context.SaveChangesAsync(token);
     }
 
     public async Task<Key> AddKey(Key key, CancellationToken token)
@@ -99,23 +90,14 @@ public class DataAccess : IDataAccess, IDisposable
         return entityKey.Entity;
     }
 
-    public async Task AddKeyLock(KeyLock keyLock, CancellationToken token)
-    {
-        await _context.KeyLocks.AddAsync(keyLock, token);
-        await _context.SaveChangesAsync(token);
-    }
-
-    public Task<KeyLock> GetKeyLock(Guid keyId, Guid lockId, CancellationToken token)
-        => _context.KeyLocks.FirstOrDefaultAsync(kl => kl.KeyId == keyId && kl.LockId == lockId, token);
-    
     public async Task AddAccessLock(AccessLock accessLock, CancellationToken token)
     {
         await _context.AccessLocks.AddAsync(accessLock, token);
         await _context.SaveChangesAsync(token);
     }
 
-    public Task GetAccessLock(Guid accessId, CancellationToken token)
-        => _context.AccessLocks.FirstOrDefaultAsync(al => al.AccessId == accessId, token);
+    public Task<AccessLock> GetAccessLock(Guid accessId, Guid lockId, CancellationToken token)
+        => _context.AccessLocks.FirstOrDefaultAsync(al => al.AccessId == accessId && al.LockId == lockId, token);
 
     public void Dispose()
         => _context?.Dispose();

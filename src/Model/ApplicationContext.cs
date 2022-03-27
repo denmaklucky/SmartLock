@@ -27,9 +27,7 @@ public class ApplicationContext : DbContext
     public DbSet<Lock> Locks { get; set; }
     public DbSet<OpeningHistory> OpeningHistories { get; set; }
     public DbSet<Role> Roles { get; set; }
-    public DbSet<KeyLock> KeyLocks { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<LockSetting> LockSettings { get; set; }
-    public DbSet<UserLock> UserLocks { get; set; }
     public DbSet<AccessLock> AccessLocks { get; set; }
 }

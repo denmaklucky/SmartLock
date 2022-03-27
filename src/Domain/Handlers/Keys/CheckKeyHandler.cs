@@ -37,7 +37,7 @@ public class CheckKeyHandler : IRequestHandler<CheckKeyCommand, CheckKeyResult>
         //         return new CheckKeyResult {ErrorCode = ErrorCodes.NotActive};
         // }
 
-        var keyLock = await _dataAccess.GetKeyLock(request.KeyId, request.LockId, cancellationToken);
+        var keyLock = await _dataAccess.GetAccessLock(request.KeyId, request.LockId, cancellationToken);
 
         if (keyLock == null)
             return new CheckKeyResult { ErrorCode = ErrorCodes.NotFound, Messages = new []{$"Couldn't key with id `{request.KeyId}` for lock with id `{request.LockId}`"}};
