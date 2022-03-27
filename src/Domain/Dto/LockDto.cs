@@ -12,6 +12,7 @@ public class LockDto
     public LockStateEnum State { get; set; }
     public bool IsDeleted { get; set; }
     public LockSettingDto Setting { get; set; }
+    public KeyDto[] Keys { get; set; }
 }
 
 public class LockSettingDto
