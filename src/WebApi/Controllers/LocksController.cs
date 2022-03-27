@@ -30,9 +30,10 @@ public class LocksController : ControllerBase
 
     [Authorize(Roles = "admin,user")]
     [HttpPost, ValidateRequest, Route("{lockId}/open")]
-    public async Task<IActionResult> Open(CancellationToken token)
+    public async Task<IActionResult> Open(string lockId, [FromBody]OpenLockRequest request, CancellationToken token)
     {
-        return Ok();
+        var result = await _mediator.Send(new OpenLockCommand(lockId, request.KeyId, User.GetUserId()), token);
+        return result.IsSuccess ? Ok(result) : BadRequest(new ErrorResponse(result.ErrorCode));
     }
 
     [Authorize(Roles = "admin")]
@@ -59,8 +60,9 @@ public class LocksController : ControllerBase
 
     [Authorize(Roles = "admin")]
     [HttpDelete, ValidateRequest, Route("{lockId}/delete")]
-    public async Task<IActionResult> Delete(string lockId, CancellationToken token)
+    public async Task<IActionResult> Delete(Guid lockId, CancellationToken token)
     {
-        return Ok();
+        var result = await _mediator.Send(new DeleteLockCommand(lockId, User.GetUserId()));
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.ValidatorErrors));
     }
 }

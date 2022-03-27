@@ -46,6 +46,7 @@ builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection(TokenO
 
 builder.Services.AddScoped<IValidator<CreateLockCommand>, CreateLockCommandValidator>();
 builder.Services.AddScoped<IValidator<DeleteLockCommand>, DeleteLockCommandValidator>();
+builder.Services.AddScoped<IValidator<OpenLockCommand>, OpenLockCommandValidator>();
 
 var app = builder.Build();
 
