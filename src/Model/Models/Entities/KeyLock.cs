@@ -5,7 +5,7 @@ namespace Model.Models.Entities;
 public class KeyLock : IEntityBase
 {
     [Required]
-    public Guid UserId { get; set; }
+    public Guid KeyId { get; set; }
     [Required]
     public Guid LockId { get; set; }
 

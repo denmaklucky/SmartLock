@@ -1,9 +1,11 @@
 using System.Text;
 using Domain;
+using Domain.Commands.Keys;
 using Domain.Commands.Locks;
 using Domain.Options;
 using Domain.Queries.Locks;
 using Domain.Services;
+using Domain.Validators.Keys;
 using Domain.Validators.Locks;
 using FluentValidation;
 using MediatR;
@@ -50,6 +52,7 @@ builder.Services.AddScoped<IValidator<ActivateLockCommand>, ActivateLockCommandV
 builder.Services.AddScoped<IValidator<DeleteLockCommand>, DeleteLockCommandValidator>();
 builder.Services.AddScoped<IValidator<OpenLockCommand>, OpenLockCommandValidator>();
 builder.Services.AddScoped<IValidator<UpdateLockCommand>, UpdateLockCommandValidator>();
+builder.Services.AddScoped<IValidator<CreateKeyCommand>, CreateKeyCommandValidator>();
 
 var app = builder.Build();
 
