@@ -45,7 +45,7 @@ builder.Services.AddAuthentication("Bearer")
 builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection(TokenOptions.SectionName));
 
 builder.Services.AddScoped<IValidator<CreateLockCommand>, CreateLockCommandValidator>();
-
+builder.Services.AddScoped<IValidator<DeleteLockCommand>, DeleteLockCommandValidator>();
 
 var app = builder.Build();
 

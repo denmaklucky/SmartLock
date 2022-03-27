@@ -39,6 +39,7 @@ public class CreateLockHandler : IRequestHandler<CreateLockCommand, CreateLockRe
         var newLock = new Lock
         {
             State = LockStateEnum.Online,
+            ActivationKey = request.ActivationKey,
             Title = request.Title,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = request.UserId

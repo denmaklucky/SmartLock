@@ -12,6 +12,8 @@ public class Lock : EntityModifiedBase
     [Required]
     public string ActivationKey { get; set; }
     
+    public bool IsDeleted { get; set; }
+    
     public string Title { get; set; }
     
     [InverseProperty(nameof(Lock))]

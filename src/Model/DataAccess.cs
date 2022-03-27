@@ -11,6 +11,8 @@ public interface IDataAccess
     Task<Lock> AddLock(Lock @lock, CancellationToken token);
     Task<LockSetting> AddSetting(LockSetting lockSetting, CancellationToken token);
     Task<User> GetUserById(Guid userId, CancellationToken token);
+    Task<Lock> UpdateLock(Lock @lock, CancellationToken token);
+    Task<Lock> GetLock(Guid lockId, CancellationToken token);
 }
 
 public class DataAccess : IDataAccess, IDisposable
@@ -49,6 +51,17 @@ public class DataAccess : IDataAccess, IDisposable
 
         return entityLockSetting.Entity;
     }
+
+    public async Task<Lock> UpdateLock(Lock @lock, CancellationToken token)
+    {
+        var entityLock =  _context.Locks.Update(@lock);
+        await _context.SaveChangesAsync(token);
+
+        return entityLock.Entity;
+    }
+
+    public Task<Lock> GetLock(Guid lockId, CancellationToken token)
+        => _context.Locks.FirstOrDefaultAsync(l => l.Id == lockId, token);
 
     public void Dispose()
     {
