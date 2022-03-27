@@ -46,7 +46,7 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
             throw new LogicException(ErrorCodes.InternalError, $"The lock {@lock.Id} is deleted or offline");
 
         var keyId = Guid.Parse(request.KeyId);
-        var checkKeyResult = await _mediator.Send(new CheckKeyCommand(keyId), cancellationToken);
+        var checkKeyResult = await _mediator.Send(new CheckKeyCommand(keyId, @lock.Id), cancellationToken);
 
         if (!checkKeyResult.IsSuccess)
             return new OpenLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new []{$"Key with id {keyId} is not valid. Please try different one."}};

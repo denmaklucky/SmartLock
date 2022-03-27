@@ -18,6 +18,7 @@ public interface IDataAccess
     Task AddUserLock(KeyLock keyLock, CancellationToken token);
     Task<Key> AddKey(Key key, CancellationToken token);
     Task AddKeyLock(KeyLock keyLock, CancellationToken token);
+    Task<KeyLock> GetKeyLock(Guid keyId, Guid lockId, CancellationToken token);
 }
 
 public class DataAccess : IDataAccess, IDisposable
@@ -76,7 +77,7 @@ public class DataAccess : IDataAccess, IDisposable
         var query = 
             from ul in _context.KeyLocks
             join l in _context.Locks.Include(l => l.Setting) on ul.LockId equals l.Id
-            where ul.KeyId == userId
+            where l.CreatedBy == userId
             select l;
         
         return query;
@@ -101,6 +102,9 @@ public class DataAccess : IDataAccess, IDisposable
         await _context.KeyLocks.AddAsync(keyLock, token);
         await _context.SaveChangesAsync(token);
     }
+
+    public Task<KeyLock> GetKeyLock(Guid keyId, Guid lockId, CancellationToken token)
+        => _context.KeyLocks.FirstOrDefaultAsync(kl => kl.KeyId == keyId && kl.LockId == lockId, token);
 
     public void Dispose()
     {
