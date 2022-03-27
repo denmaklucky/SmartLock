@@ -3,6 +3,7 @@ using Domain;
 using Domain.Commands;
 using Domain.Commands.Locks;
 using Domain.Options;
+using Domain.Queries.Locks;
 using Domain.Services;
 using Domain.Validators;
 using Domain.Validators.Locks;
@@ -46,6 +47,7 @@ builder.Services.AddAuthentication("Bearer")
 
 builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection(TokenOptions.SectionName));
 
+builder.Services.AddScoped<IValidator<GetLocksQuery>, GetLocksQueryValidator>();
 builder.Services.AddScoped<IValidator<CreateLockCommand>, CreateLockCommandValidator>();
 builder.Services.AddScoped<IValidator<DeleteLockCommand>, DeleteLockCommandValidator>();
 builder.Services.AddScoped<IValidator<OpenLockCommand>, OpenLockCommandValidator>();
