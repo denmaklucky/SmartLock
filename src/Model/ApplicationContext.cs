@@ -30,4 +30,5 @@ public class ApplicationContext : DbContext
     public DbSet<KeyLock> KeyLocks { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<LockSetting> LockSettings { get; set; }
+    public DbSet<UserLock> UserLocks { get; set; }
 }

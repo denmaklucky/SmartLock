@@ -58,6 +58,14 @@ public class ActivateLockHandler : IRequestHandler<ActivateLockCommand, CreateLo
 
         var lockSetting = await _dataAccess.AddSetting(newSetting, cancellationToken);
 
+        var userLock = new UserLock
+        {
+            LockId = createdLock.Id,
+            UserId = request.UserId
+        };
+
+        await _dataAccess.AddUserLock(userLock, cancellationToken);
+
         var createKeyResult = await _mediator.Send(new CreateKeyCommand(request.UserId, createdLock.Id.ToString(), KeyTypeEnum.eKey, DateTime.UtcNow.AddMinutes(Constants.DefaultTimeExistingOfEKey)), cancellationToken);
 
         var key = createKeyResult.Data;

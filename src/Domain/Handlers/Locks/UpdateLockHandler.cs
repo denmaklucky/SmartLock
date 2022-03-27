@@ -57,6 +57,7 @@ public class UpdateLockHandler : IRequestHandler<UpdateLockCommand, UpdateLockRe
                 Id = updatedLock.Id,
                 State = updatedLock.State,
                 Title = updatedLock.Title,
+                IsDeleted = updatedLock.IsDeleted,
                 Setting = new LockSettingDto
                 {
                     Mode = updatedLock.Setting.Mode,
