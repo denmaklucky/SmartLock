@@ -1,4 +1,5 @@
-﻿using Domain.Commands.Locks;
+﻿using Domain.Commands.Keys;
+using Domain.Commands.Locks;
 using Domain.Dto;
 using Domain.Exceptions;
 using Domain.Queries;
@@ -39,20 +40,26 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
         var @lock = await _dataAccess.GetLock(Guid.Parse(request.LockId), cancellationToken);
 
         if (@lock == null)
-            throw new LogicException(ErrorCodes.InternalError, $"Couldn't find a lock by following `lockId` {request.LockId}");
+            return new OpenLockResult { ErrorCode = ErrorCodes.NotFound, ValidatorErrors = new[] { $"Couldn't find a lock by following `lockId` {request.LockId}" } };
 
         if (@lock.IsDeleted || @lock.State == LockStateEnum.Offline)
             throw new LogicException(ErrorCodes.InternalError, $"The lock {@lock.Id} is deleted or offline");
+
+        var keyId = Guid.Parse(request.KeyId);
+        var checkKeyResult = await _mediator.Send(new CheckKeyCommand(keyId), cancellationToken);
+
+        if (!checkKeyResult.IsSuccess)
+            return new OpenLockResult { ErrorCode = ErrorCodes.InvalidRequest, ValidatorErrors = new []{$"Key with id {keyId} is not valid. Please try different one."}};
         
         @lock.OpeningHistories.Add(new OpeningHistory
         {
             LockId = @lock.Id,
-            KeyId = Guid.Parse(request.KeyId),
+            KeyId = keyId,
             CreatedBy = request.UserId,
             CreatedOn = DateTime.UtcNow
         });
 
-        var updatedLock = await _dataAccess.UpdateLock(@lock, cancellationToken);
+        var _ = await _dataAccess.UpdateLock(@lock, cancellationToken);
         return new OpenLockResult
         {
             Data = new OpenLockDto
