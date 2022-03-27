@@ -26,16 +26,16 @@ public class CheckKeyHandler : IRequestHandler<CheckKeyCommand, CheckKeyResult>
         if (key.IsDeleted)
             return new CheckKeyResult {ErrorCode = ErrorCodes.NotActive};
 
-        if (key.Type == KeyTypeEnum.eKey)
-        {
-            var expiredAt = key.ExpiredAt.GetValueOrDefault();
-            
-            if (expiredAt == default)
-                throw new LogicException(ErrorCodes.InternalError, $"eKey with id {key.Id} doesn't contains an expiry date");
-
-            if (IsExpired(expiredAt))
-                return new CheckKeyResult {ErrorCode = ErrorCodes.NotActive};
-        }
+        // if (key.Type == KeyTypeEnum.eKey)
+        // {
+        //     var expiredAt = key.ExpiredAt.GetValueOrDefault();
+        //     
+        //     if (expiredAt == default)
+        //         throw new LogicException(ErrorCodes.InternalError, $"eKey with id {key.Id} doesn't contains an expiry date");
+        //
+        //     if (IsExpired(expiredAt))
+        //         return new CheckKeyResult {ErrorCode = ErrorCodes.NotActive};
+        // }
 
         var keyLock = await _dataAccess.GetKeyLock(request.KeyId, request.LockId, cancellationToken);
 

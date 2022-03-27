@@ -8,6 +8,6 @@ public class DeleteLockCommandValidator : AbstractValidator<DeleteLockCommand>
     public DeleteLockCommandValidator()
     {
         RuleFor(dl => dl.LockId).NotEmpty().Must(ol => Guid.TryParse(ol, out _));
-        RuleFor(dl => dl.UserId).NotEqual(Guid.Empty);
+        RuleFor(dl => dl.DeletedBy).NotEqual(Guid.Empty);
     }
 }

@@ -9,6 +9,6 @@ public class OpenLockCommandValidator : AbstractValidator<OpenLockCommand>
     {
         RuleFor(ol => ol.KeyId).NotEmpty().Must(ol => Guid.TryParse(ol, out _)).WithMessage("`{PropertyName}` should be GUID");
         RuleFor(ol => ol.LockId).NotEmpty().Must(ol => Guid.TryParse(ol, out _)).WithMessage("`{PropertyName}` should be GUID");
-        RuleFor(ol => ol.UserId).NotEqual(Guid.Empty);
+        RuleFor(ol => ol.OpenedBy).NotEqual(Guid.Empty);
     }
 }

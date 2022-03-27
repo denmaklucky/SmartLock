@@ -59,4 +59,10 @@ public class LocksController : ControllerBase
         var result = await _mediator.Send(new DeleteLockCommand(lockId, User.GetUserId()), token);
         return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
+
+    [HttpPost, Route("{lockId}/admit")]
+    public void Admit()
+    {
+        
+    }
 }

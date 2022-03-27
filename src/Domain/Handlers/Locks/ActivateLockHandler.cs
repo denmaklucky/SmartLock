@@ -31,17 +31,17 @@ public class ActivateLockHandler : IRequestHandler<ActivateLockCommand, CreateLo
         if (!validatorResult.IsValid)
             return new CreateLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray() };
 
-        var getUserResult = await _mediator.Send(new GetUserQuery(request.UserId), cancellationToken);
+        var getUserResult = await _mediator.Send(new GetUserQuery(request.ActivatedBy), cancellationToken);
 
         if (!getUserResult.IsSuccess)
-            throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.UserId}");
+            throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.ActivatedBy}");
 
         var newLock = new Lock
         {
             ActivationKey = request.ActivationKey,
             Title = request.Title,
             CreatedOn = DateTime.UtcNow,
-            CreatedBy = request.UserId
+            CreatedBy = request.ActivatedBy
         };
 
         var createdLock = await _dataAccess.AddLock(newLock, cancellationToken);
@@ -50,7 +50,7 @@ public class ActivateLockHandler : IRequestHandler<ActivateLockCommand, CreateLo
         {
             LockId = createdLock.Id,
             Mode = LockModeEnum.Standard,
-            CreatedBy = request.UserId,
+            CreatedBy = request.ActivatedBy,
             CreatedOn = DateTime.UtcNow
         };
 
@@ -59,7 +59,7 @@ public class ActivateLockHandler : IRequestHandler<ActivateLockCommand, CreateLo
         var accessLock = new AccessLock
         {
             LockId = createdLock.Id,
-            AccessId = request.UserId,
+            AccessId = request.ActivatedBy,
             Type = AccessTypeEnum.User 
         };
 

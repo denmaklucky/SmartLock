@@ -3,5 +3,5 @@
 public enum KeyTypeEnum
 {
     Tag,
-    eKey
+    Card
 }

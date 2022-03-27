@@ -30,10 +30,10 @@ public class DeleteLockHandler : IRequestHandler<DeleteLockCommand, DeleteLockRe
         if (!validatorResult.IsValid)
             return new DeleteLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray() };
 
-        var getUserResult = await _mediator.Send(new GetUserQuery(request.UserId), cancellationToken);
+        var getUserResult = await _mediator.Send(new GetUserQuery(request.DeletedBy), cancellationToken);
 
         if (!getUserResult.IsSuccess)
-            throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.UserId}");
+            throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.DeletedBy}");
 
         var lockId = Guid.Parse(request.LockId);
         var @lock = await _dataAccess.GetLock(lockId, cancellationToken);
@@ -42,7 +42,7 @@ public class DeleteLockHandler : IRequestHandler<DeleteLockCommand, DeleteLockRe
             throw new LogicException(ErrorCodes.InternalError, $"Couldn't find a lock by following `lockId` {request.LockId}");
 
         @lock.IsDeleted = true;
-        @lock.ModifiedBy = request.UserId;
+        @lock.ModifiedBy = request.DeletedBy;
         @lock.ModifiedOn = DateTime.UtcNow;
 
         var updatedLock = await _dataAccess.UpdateLock(@lock, cancellationToken);

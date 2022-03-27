@@ -29,10 +29,10 @@ public class UpdateLockHandler : IRequestHandler<UpdateLockCommand, UpdateLockRe
         if (!validatorResult.IsValid)
             return new UpdateLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray() };
 
-        var getUserResult = await _mediator.Send(new GetUserQuery(request.UserId), cancellationToken);
+        var getUserResult = await _mediator.Send(new GetUserQuery(request.UpdatedBy), cancellationToken);
 
         if (!getUserResult.IsSuccess)
-            throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.UserId}");
+            throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.UpdatedBy}");
 
         var @lock = await _dataAccess.GetLock(Guid.Parse(request.LockId), cancellationToken);
 
@@ -40,7 +40,7 @@ public class UpdateLockHandler : IRequestHandler<UpdateLockCommand, UpdateLockRe
             return new UpdateLockResult { ErrorCode = ErrorCodes.NotFound, Messages = new[] { $"Couldn't find a lock by following `lockId` {request.LockId}" } };
 
         @lock.Title = string.IsNullOrWhiteSpace(request.Title) ? @lock.Title : request.Title;
-        @lock.ModifiedBy = request.UserId;
+        @lock.ModifiedBy = request.UpdatedBy;
         @lock.ModifiedOn = DateTime.UtcNow;
 
         var lockSetting = @lock.Setting;

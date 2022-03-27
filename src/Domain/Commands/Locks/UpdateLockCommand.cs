@@ -4,4 +4,4 @@ using Model.Enums;
 
 namespace Domain.Commands.Locks;
 
-public record UpdateLockCommand(Guid UserId, string LockId, string Title, LockModeEnum? Mode, TimeOnly? StartOpenTime, TimeOnly? EndOpenTime) : IRequest<UpdateLockResult>;
+public record UpdateLockCommand(Guid UpdatedBy, string LockId, string Title, LockModeEnum? Mode, TimeOnly? StartOpenTime, TimeOnly? EndOpenTime) : IRequest<UpdateLockResult>;

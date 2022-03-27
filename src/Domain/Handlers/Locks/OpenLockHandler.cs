@@ -32,10 +32,10 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
         if (!validatorResult.IsValid)
             return new OpenLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray() };
 
-        var getUserResult = await _mediator.Send(new GetUserQuery(request.UserId), cancellationToken);
+        var getUserResult = await _mediator.Send(new GetUserQuery(request.OpenedBy), cancellationToken);
 
         if (!getUserResult.IsSuccess)
-            throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.UserId}");
+            throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.OpenedBy}");
 
         var @lock = await _dataAccess.GetLock(Guid.Parse(request.LockId), cancellationToken);
 
@@ -55,7 +55,7 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
         {
             LockId = @lock.Id,
             AccessId = keyId,
-            CreatedBy = request.UserId,
+            CreatedBy = request.OpenedBy,
             CreatedOn = DateTime.UtcNow
         });
 
