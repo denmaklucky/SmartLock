@@ -24,20 +24,6 @@ public class CheckKeyHandler : IRequestHandler<CheckKeyCommand, CheckKeyResult>
         if (key.IsDeleted)
             return new CheckKeyResult { ErrorCode = ErrorCodes.NotActive };
 
-        var expiredAt = key.ExpiredAt.GetValueOrDefault();
-        if (expiredAt != default)
-        {
-            if (IsExpired(expiredAt))
-                return new CheckKeyResult { ErrorCode = ErrorCodes.NotActive };
-        }
-
         return new CheckKeyResult();
-    }
-
-    private bool IsExpired(DateTime date)
-    {
-        var now = DateTime.UtcNow;
-        //Less than zero if `now` is earlier than `date`
-        return DateTime.Compare(now, date) >= 0;
     }
 }

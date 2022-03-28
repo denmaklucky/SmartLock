@@ -54,8 +54,7 @@ public class CreateKeyHandler : IRequestHandler<CreateKeyCommand, CreateKeyResul
             Type = request.Type,
             UserId = userId,
             CreatedBy = request.CreatedBy,
-            CreatedOn = DateTime.UtcNow,
-            ExpiredAt = request.ExpiredAt
+            CreatedOn = DateTime.UtcNow
         };
 
         var createdKey = await _dataAccess.AddKey(newKey, cancellationToken);
@@ -75,7 +74,6 @@ public class CreateKeyHandler : IRequestHandler<CreateKeyCommand, CreateKeyResul
                 Id = createdKey.Id,
                 Type = createdKey.Type,
                 UserId = createdKey.UserId,
-                ExpiredAt = createdKey.ExpiredAt,
                 IsDeleted = createdKey.IsDeleted
             }
         };

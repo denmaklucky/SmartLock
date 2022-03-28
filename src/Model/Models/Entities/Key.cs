@@ -12,6 +12,4 @@ public class Key : EntityModifiedBase
     public Guid UserId { get; set; }
     
     public bool IsDeleted { get; set; }
-    
-    public DateTime? ExpiredAt { get; set; }
 }

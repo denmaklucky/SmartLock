@@ -1,3 +1,6 @@
-﻿namespace Domain.Commands.Keys;
+﻿using Domain.Results.Keys;
+using MediatR;
 
-public record ChangeLockForKeyCommand(Guid UpdatedBy, string NewLockId);
+namespace Domain.Commands.Keys;
+
+public record ChangeLockForKeyCommand(Guid UpdatedBy, string KeyId, string NewLockId, string OldLockId) : IRequest<ChangeLockForKeyResult>;

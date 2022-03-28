@@ -27,20 +27,21 @@ public class KeysController : ControllerBase
     }
 
     [HttpPatch, Route("{keyId}/change-user")]
-    public async  Task<IActionResult> ChangeUser([FromBody]ChangeUserForKeyRequest request, CancellationToken token)
+    public async Task<IActionResult> ChangeUser(string keyId, [FromBody] ChangeUserForKeyRequest request, CancellationToken token)
     {
-        
+        var result = await _mediator.Send(new ChangeUserForKeyCommand(User.GetUserId(), keyId, request.NewUserId), token);
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
-    
+
     [HttpPost, Route("{keyId}/change-lock")]
-    public async  Task<IActionResult> ChangeLock([FromBody]ChangeUserForKeyRequest request, CancellationToken token)
+    public async Task<IActionResult> ChangeLock(string keyid, [FromBody] ChangeLockForKeyRequest request, CancellationToken token)
     {
-        
+        var result = await _mediator.Send(new ChangeLockForKeyCommand(User.GetUserId(), keyid, request.NewLockId, request.OldNewLockId), token);
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 
     [HttpDelete, Route("{keyId}")]
     public void Delete()
     {
-        
     }
 }

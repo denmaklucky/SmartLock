@@ -9,5 +9,6 @@ public class ChangeUserForKeyCommandValidator : AbstractValidator<ChangeUserForK
     {
         RuleFor(uk => uk.UpdatedBy).NotEqual(Guid.Empty);
         RuleFor(ck => ck.NewUserId).NotEmpty().Must(userId => Guid.TryParse(userId, out _)).WithMessage("`{PropertyName}` should be GUID");
+        RuleFor(ck => ck.KeyId).NotEmpty().Must(keyId => Guid.TryParse(keyId, out _)).WithMessage("`{PropertyName}` should be GUID");
     }
 }

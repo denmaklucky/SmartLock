@@ -7,7 +7,9 @@ public class ChangeLockForKeyCommandValidator : AbstractValidator<ChangeLockForK
 {
     public ChangeLockForKeyCommandValidator()
     {
-        RuleFor(uk => uk.UpdatedBy).NotEqual(Guid.Empty);
-        RuleFor(ck => ck.NewLockId).NotEmpty().Must(lockId => Guid.TryParse(lockId, out _)).WithMessage("`{PropertyName}` should be GUID");
+        RuleFor(cl => cl.UpdatedBy).NotEqual(Guid.Empty);
+        RuleFor(cl => cl.NewLockId).NotEmpty().Must(newLockId => Guid.TryParse(newLockId, out _)).WithMessage("`{PropertyName}` should be GUID");
+        RuleFor(cl => cl.OldLockId).NotEmpty().Must(oldLockId => Guid.TryParse(oldLockId, out _)).WithMessage("`{PropertyName}` should be GUID");
+        RuleFor(ck => ck.KeyId).NotEmpty().Must(keyId => Guid.TryParse(keyId, out _)).WithMessage("`{PropertyName}` should be GUID");
     }
 }

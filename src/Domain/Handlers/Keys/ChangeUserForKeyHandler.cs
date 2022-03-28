@@ -60,27 +60,9 @@ public class ChangeUserForKeyHandler : IRequestHandler<ChangeUserForKeyCommand, 
             {
                 Id = updatedKey.Id,
                 Type = updatedKey.Type,
-                ExpiredAt = updatedKey.ExpiredAt,
                 IsDeleted = updatedKey.IsDeleted,
                 UserId = updatedKey.UserId
             }
         };
-
-        // if (!string.IsNullOrEmpty(request.LockId))
-        // {
-        //     var lockId = Guid.Parse(request.LockId);
-        //     var checkLockResult = await _mediator.Send(new CheckLockCommand(lockId), cancellationToken);
-        //
-        //     if (!checkLockResult.IsSuccess)
-        //         return new ChangeUserForKeyResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new[] { $"Lock with id `{lockId}` not found."} };
-        //     
-        //     var canOpenLockByKeyResult = await _mediator.Send(new CanOpenLockByKeyCommand(keyId, lockId), cancellationToken);
-        //
-        //     if (!canOpenLockByKeyResult.IsSuccess)
-        //         return new ChangeUserForKeyResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new []{$"Key with id {keyId} is not valid. Please try different one."}};
-        //
-        //     var accessLock = await _dataAccess.GetAccessLock(keyId, lockId, cancellationToken);
-        //     
-        // }
     }
 }

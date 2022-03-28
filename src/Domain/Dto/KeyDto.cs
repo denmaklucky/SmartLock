@@ -11,5 +11,4 @@ public class KeyDto
     public KeyTypeEnum Type { get; set; }
     public bool IsDeleted { get; set; }
     public Guid UserId { get; set; }
-    public DateTime? ExpiredAt { get; set; }
 }

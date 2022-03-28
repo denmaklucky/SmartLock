@@ -2,4 +2,4 @@
 
 namespace WebApi.Requests;
 
-public record ChangeLockForKeyRequest([Required]string NewLockId);
+public record ChangeLockForKeyRequest([Required]string NewLockId, [Required]string OldNewLockId);
