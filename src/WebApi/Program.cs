@@ -53,7 +53,6 @@ builder.Services.AddScoped<IValidator<DeleteLockCommand>, DeleteLockCommandValid
 builder.Services.AddScoped<IValidator<OpenLockCommand>, OpenLockCommandValidator>();
 builder.Services.AddScoped<IValidator<UpdateLockCommand>, UpdateLockCommandValidator>();
 builder.Services.AddScoped<IValidator<CreateKeyCommand>, CreateKeyCommandValidator>();
-builder.Services.AddScoped<IValidator<AssignKeyToUserCommand>, AssignKeyToUserValidator>();
 
 var app = builder.Build();
 
