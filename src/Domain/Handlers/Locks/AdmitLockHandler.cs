@@ -1,6 +1,5 @@
 ﻿using Domain.Commands.Keys;
 using Domain.Commands.Locks;
-using Domain.Exceptions;
 using Domain.Queries;
 using Domain.Results.Locks;
 using FluentValidation;
@@ -35,7 +34,7 @@ public class AdmitLockHandler : IRequestHandler<AdmitLockCommand, AdmitLockResul
 
         if (request.Type == AccessTypeEnum.Key)
         {
-            var checkKeyResult = await _mediator.Send(new CheckKeyCommand(accessId, @lock.Id), cancellationToken);
+            var checkKeyResult = await _mediator.Send(new CheckKeyCommand(accessId), cancellationToken);
 
             if (!checkKeyResult.IsSuccess)
                 return new AdmitLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new []{$"Key with id {accessId} is not valid. Please try different one."}};

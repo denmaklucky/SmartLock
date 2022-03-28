@@ -46,9 +46,9 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
             throw new LogicException(ErrorCodes.InternalError, $"The lock {@lock.Id} is deleted");
 
         var keyId = Guid.Parse(request.KeyId);
-        var checkKeyResult = await _mediator.Send(new CheckKeyCommand(keyId, @lock.Id), cancellationToken);
+        var canOpenLockByKeyResult = await _mediator.Send(new CanOpenLockByKeyCommand(keyId, @lock.Id), cancellationToken);
 
-        if (!checkKeyResult.IsSuccess)
+        if (!canOpenLockByKeyResult.IsSuccess)
             return new OpenLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new []{$"Key with id {keyId} is not valid. Please try different one."}};
         
         @lock.OpeningHistories.Add(new OpeningHistory

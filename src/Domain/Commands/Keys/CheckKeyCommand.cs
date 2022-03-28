@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Domain.Commands.Keys;
 
-public record CheckKeyCommand(Guid KeyId, Guid LockId) : IRequest<CheckKeyResult>;
+public record CheckKeyCommand(Guid KeyId) : IRequest<CheckKeyResult>;
