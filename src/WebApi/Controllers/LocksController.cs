@@ -1,6 +1,5 @@
 ﻿using Domain.Commands.Locks;
 using Domain.Queries.Locks;
-using Domain.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +45,7 @@ public class LocksController : ControllerBase
     }
 
     [Authorize(Roles = "admin")]
-    [HttpPatch, ValidateRequest, Route("{lockId}/update")]
+    [HttpPatch, ValidateRequest, Route("{lockId}")]
     public async Task<IActionResult> PartialUpdate(string lockId, [FromBody] UpdateLockRequest request, CancellationToken token)
     {
         var result = await _mediator.Send(new UpdateLockCommand(User.GetUserId(), lockId, request.Title, request.Mode, request.StartOpenTime, request.EndOpenTime), token);
@@ -54,7 +53,7 @@ public class LocksController : ControllerBase
     }
 
     [Authorize(Roles = "admin")]
-    [HttpDelete, ValidateRequest, Route("{lockId}/delete")]
+    [HttpDelete, ValidateRequest, Route("{lockId}")]
     public async Task<IActionResult> Delete(string lockId, CancellationToken token)
     {
         var result = await _mediator.Send(new DeleteLockCommand(lockId, User.GetUserId()), token);

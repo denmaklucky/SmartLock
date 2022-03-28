@@ -19,6 +19,7 @@ public interface IDataAccess
     Task<AccessLock> AddAccessLock(AccessLock accessLock, CancellationToken token);
     Task<AccessLock> GetAccessLock(Guid accessId, Guid lockId, CancellationToken token);
     Task<AccessLock> UpdateAccessLock(AccessLock accessLock, CancellationToken token);
+    Task<Key> UpdateKey(Key key, CancellationToken token);
 }
 
 public class DataAccess : IDataAccess, IDisposable
@@ -115,6 +116,14 @@ public class DataAccess : IDataAccess, IDisposable
         await _context.SaveChangesAsync(token);
 
         return entityLock.Entity;
+    }
+    
+    public async Task<Key> UpdateKey(Key key, CancellationToken token)
+    {
+        var entityKey = _context.Keys.Update(key);
+        await _context.SaveChangesAsync(token);
+
+        return entityKey.Entity;
     }
 
     public void Dispose()

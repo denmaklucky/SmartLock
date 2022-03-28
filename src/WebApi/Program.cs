@@ -56,6 +56,7 @@ builder.Services.AddScoped<IValidator<CreateKeyCommand>, CreateKeyCommandValidat
 builder.Services.AddScoped<IValidator<AdmitLockCommand>, AdmitLockCommandValidator>();
 builder.Services.AddScoped<IValidator<ForbidLockCommand>, ForbidLockCommandValidator>();
 builder.Services.AddScoped<IValidator<GetOpeningHistoryQuery>, GetOpeningHistoryQueryValidator>();
+builder.Services.AddScoped<IValidator<ChangeUserForKeyCommand>, ChangeUserForKeyCommandValidator>();
 
 var app = builder.Build();
 

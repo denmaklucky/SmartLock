@@ -74,6 +74,7 @@ public class CreateKeyHandler : IRequestHandler<CreateKeyCommand, CreateKeyResul
             {
                 Id = createdKey.Id,
                 Type = createdKey.Type,
+                UserId = createdKey.UserId,
                 ExpiredAt = createdKey.ExpiredAt,
                 IsDeleted = createdKey.IsDeleted
             }

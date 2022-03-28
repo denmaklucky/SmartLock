@@ -10,5 +10,6 @@ public class KeyDto
     [JsonConverter(typeof(StringEnumConverter))]
     public KeyTypeEnum Type { get; set; }
     public bool IsDeleted { get; set; }
+    public Guid UserId { get; set; }
     public DateTime? ExpiredAt { get; set; }
 }
