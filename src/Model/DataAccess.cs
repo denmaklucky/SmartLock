@@ -14,7 +14,7 @@ public interface IDataAccess
     Task<Lock> UpdateLock(Lock @lock, CancellationToken token);
     Task<Lock> GetLock(Guid lockId, CancellationToken token);
     Task<Key> GetKey(Guid keyId, CancellationToken token);
-    Task<IEnumerable<Lock>> GetLockByUserId(Guid userId, CancellationToken token);
+    Task<IEnumerable<Lock>> GetLocksByUserId(Guid userId, CancellationToken token);
     Task<Key> AddKey(Key key, CancellationToken token);
     Task AddAccessLock(AccessLock accessLock, CancellationToken token);
     Task<AccessLock> GetAccessLock(Guid accessId, Guid lockId, CancellationToken token);
@@ -71,15 +71,22 @@ public class DataAccess : IDataAccess, IDisposable
     public Task<Key> GetKey(Guid keyId, CancellationToken token)
         => _context.Keys.FirstOrDefaultAsync(k => k.Id == keyId, token);
 
-    public async Task<IEnumerable<Lock>> GetLockByUserId(Guid userId, CancellationToken token)
+    public async Task<IEnumerable<Lock>> GetLocksByUserId(Guid userId, CancellationToken token)
     {
-        var query =
-            from ul in _context.AccessLocks
-            join l in _context.Locks.Include(l => l.Setting) on ul.LockId equals l.Id
+        var getLocksByUserIdQuery =
+            from al in _context.AccessLocks
+            join l in _context.Locks.Include(l => l.Setting) on al.LockId equals l.Id
             where l.CreatedBy == userId
             select l;
 
-        return query;
+        var getLockByKeyQuery =
+            from key in _context.Keys
+            join al in _context.AccessLocks on key.Id equals al.AccessId
+            join l in _context.Locks.Include(l => l.Setting) on al.LockId equals l.Id
+            where key.UserId == userId
+            select l;
+
+        return getLocksByUserIdQuery.Union(getLockByKeyQuery).Distinct();
     }
 
     public async Task<Key> AddKey(Key key, CancellationToken token)

@@ -34,7 +34,7 @@ public class GetLocksHandler : IRequestHandler<GetLocksQuery, GetLocksResult>
         if (!getUserResult.IsSuccess)
             throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.UserId}");
 
-        var locks = await _dataAccess.GetLockByUserId(request.UserId, cancellationToken);
+        var locks = await _dataAccess.GetLocksByUserId(request.UserId, cancellationToken);
         return new GetLocksResult
         {
             Data = locks.Select(l => new LockDto
