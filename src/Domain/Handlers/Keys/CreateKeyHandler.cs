@@ -32,10 +32,16 @@ public class CreateKeyHandler : IRequestHandler<CreateKeyCommand, CreateKeyResul
         if (!validatorResult.IsValid)
             return new CreateKeyResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray() };
 
-        var getUserResult = await _mediator.Send(new GetUserQuery(request.CreatedBy), cancellationToken);
+        var getUserByCreatedByResult = await _mediator.Send(new GetUserQuery(request.CreatedBy), cancellationToken);
 
-        if (!getUserResult.IsSuccess)
-            throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.UserId}");
+        if (!getUserByCreatedByResult.IsSuccess)
+            throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `CreatedBy` {request.CreatedBy}");
+
+        var userId = Guid.Parse(request.UserId);
+        var getUserByUserIdResult = await _mediator.Send(new GetUserQuery(userId), cancellationToken);
+
+        if (!getUserByUserIdResult.IsSuccess)
+            return new CreateKeyResult { ErrorCode = ErrorCodes.NotFound, Messages = new[] { $"Couldn't find an user by following `UserId` {userId}"} };
 
         var lockId = Guid.Parse(request.LockId);
         var checkLockResult = await _mediator.Send(new CheckLockCommand(lockId), cancellationToken);
@@ -46,6 +52,7 @@ public class CreateKeyHandler : IRequestHandler<CreateKeyCommand, CreateKeyResul
         var newKey = new Key
         {
             Type = request.Type,
+            UserId = userId,
             CreatedBy = request.CreatedBy,
             CreatedOn = DateTime.UtcNow,
             ExpiredAt = request.ExpiredAt
