@@ -2,7 +2,7 @@
 
 namespace Domain.Results.Locks;
 
-public class AdmitLockResult : BaseResult
+public class ForbidLockResult : BaseResult
 {
     public AccessLockDto Data { get; set; }
 }

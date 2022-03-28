@@ -16,8 +16,9 @@ public interface IDataAccess
     Task<Key> GetKey(Guid keyId, CancellationToken token);
     Task<IEnumerable<Lock>> GetLocksByUserId(Guid userId, CancellationToken token);
     Task<Key> AddKey(Key key, CancellationToken token);
-    Task AddAccessLock(AccessLock accessLock, CancellationToken token);
+    Task<AccessLock> AddAccessLock(AccessLock accessLock, CancellationToken token);
     Task<AccessLock> GetAccessLock(Guid accessId, Guid lockId, CancellationToken token);
+    Task<AccessLock> UpdateAccessLock(AccessLock accessLock, CancellationToken token);
 }
 
 public class DataAccess : IDataAccess, IDisposable
@@ -97,14 +98,24 @@ public class DataAccess : IDataAccess, IDisposable
         return entityKey.Entity;
     }
 
-    public async Task AddAccessLock(AccessLock accessLock, CancellationToken token)
+    public async Task<AccessLock> AddAccessLock(AccessLock accessLock, CancellationToken token)
     {
-        await _context.AccessLocks.AddAsync(accessLock, token);
+        var entityAccessLock =await _context.AccessLocks.AddAsync(accessLock, token);
         await _context.SaveChangesAsync(token);
+
+        return entityAccessLock.Entity;
     }
 
     public Task<AccessLock> GetAccessLock(Guid accessId, Guid lockId, CancellationToken token)
         => _context.AccessLocks.FirstOrDefaultAsync(al => al.AccessId == accessId && al.LockId == lockId, token);
+    
+    public async Task<AccessLock> UpdateAccessLock(AccessLock accessLock, CancellationToken token)
+    {
+        var entityLock = _context.AccessLocks.Update(accessLock);
+        await _context.SaveChangesAsync(token);
+
+        return entityLock.Entity;
+    }
 
     public void Dispose()
         => _context?.Dispose();

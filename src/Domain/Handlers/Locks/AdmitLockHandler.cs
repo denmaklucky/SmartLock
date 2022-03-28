@@ -1,5 +1,7 @@
 ﻿using Domain.Commands.Keys;
 using Domain.Commands.Locks;
+using Domain.Dto;
+using Domain.Exceptions;
 using Domain.Queries;
 using Domain.Results.Locks;
 using FluentValidation;
@@ -29,6 +31,11 @@ public class AdmitLockHandler : IRequestHandler<AdmitLockCommand, AdmitLockResul
 
         if (!validatorResult.IsValid)
             return new AdmitLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray() };
+        
+        var getAdmittedByResult = await _mediator.Send(new GetUserQuery(request.AdmittedBy), cancellationToken);
+
+        if (!getAdmittedByResult.IsSuccess)
+            throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.AdmittedBy}");
 
         var accessId = Guid.Parse(request.AccessId);
 
@@ -57,11 +64,23 @@ public class AdmitLockHandler : IRequestHandler<AdmitLockCommand, AdmitLockResul
         {
             Type = request.Type,
             AccessId = accessId,
-            LockId = lockId
+            LockId = lockId,
+            CreatedBy = request.AdmittedBy,
+            CreatedOn = DateTime.UtcNow
         };
 
-        await _dataAccess.AddAccessLock(accessLock, cancellationToken);
+        var addedAccessLock = await _dataAccess.AddAccessLock(accessLock, cancellationToken);
 
-        return new AdmitLockResult();
+        return new AdmitLockResult
+        {
+            Data = new AccessLockDto
+            {
+                Id = addedAccessLock.Id,
+                Type = accessLock.Type,
+                AccessId = addedAccessLock.AccessId,
+                IsDeleted = addedAccessLock.IsDeleted,
+                LockId = addedAccessLock.LockId
+            }
+        };
     }
 }

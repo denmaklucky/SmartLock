@@ -25,7 +25,7 @@ public class CanOpenLockByKeyHandler : IRequestHandler<CanOpenLockByKeyCommand, 
         
         var keyLock = await _dataAccess.GetAccessLock(request.KeyId, request.LockId, cancellationToken);
 
-        if (keyLock == null)
+        if (keyLock == null || keyLock.IsDeleted)
             return new CanOpenLockByKeyResult { ErrorCode = ErrorCodes.NotFound, Messages = new[] { $"Couldn't key with id `{request.KeyId}` for lock with id `{request.LockId}`" } };
 
         return new CanOpenLockByKeyResult();

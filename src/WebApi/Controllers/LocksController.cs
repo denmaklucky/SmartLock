@@ -33,7 +33,7 @@ public class LocksController : ControllerBase
     public async Task<IActionResult> Open(string lockId, [FromBody] OpenLockRequest request, CancellationToken token)
     {
         var result = await _mediator.Send(new OpenLockCommand(lockId, request.KeyId, User.GetUserId()), token);
-        return result.IsSuccess ? Ok(result.Data ) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 
     [Authorize(Roles = "admin")]
@@ -60,9 +60,19 @@ public class LocksController : ControllerBase
         return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 
+    [Authorize(Roles = "admin")]
     [HttpPost, Route("{lockId}/admit")]
-    public void Admit()
+    public async Task<IActionResult> Admit(string lockId, [FromBody] AdmitLockRequest request, CancellationToken token)
     {
-        
+        var result = await _mediator.Send(new AdmitLockCommand(User.GetUserId(), lockId, request.AccessId, request.Type), token);
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
+    }
+
+    [Authorize(Roles = "admin")]
+    [HttpPost, Route("{lockId}/forbid")]
+    public async Task<IActionResult> Forbid(string lockId, [FromBody] ForbidLockRequest request, CancellationToken token)
+    {
+        var result = await _mediator.Send(new ForbidLockCommand(User.GetUserId(), lockId, request.AccessId), token);
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 }

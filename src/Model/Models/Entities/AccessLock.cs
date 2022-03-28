@@ -3,11 +3,8 @@ using Model.Enums;
 
 namespace Model.Models.Entities;
 
-public class AccessLock : IEntityBase
+public class AccessLock : EntityModifiedBase
 {
-    [Key]
-    public Guid Id { get; set; }
-    
     [Required]
     public Guid AccessId { get; set; }
     
@@ -16,4 +13,6 @@ public class AccessLock : IEntityBase
     
     [Required]
     public AccessTypeEnum Type { get; set; }
+    
+    public bool IsDeleted { get; set; }
 }
