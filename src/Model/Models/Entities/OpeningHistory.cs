@@ -9,4 +9,7 @@ public class OpeningHistory : EntityBase
     
     [Required]
     public Guid AccessId { get; set; }
+    
+    [Required]
+    public string UserName { get; set; }
 }

@@ -55,6 +55,7 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
         {
             LockId = @lock.Id,
             AccessId = keyId,
+            UserName = getUserResult.UserName,
             CreatedBy = request.OpenedBy,
             CreatedOn = DateTime.UtcNow
         });

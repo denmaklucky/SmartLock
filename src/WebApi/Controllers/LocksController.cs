@@ -1,5 +1,6 @@
 ﻿using Domain.Commands.Locks;
 using Domain.Queries.Locks;
+using Domain.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -73,6 +74,14 @@ public class LocksController : ControllerBase
     public async Task<IActionResult> Forbid(string lockId, [FromBody] ForbidLockRequest request, CancellationToken token)
     {
         var result = await _mediator.Send(new ForbidLockCommand(User.GetUserId(), lockId, request.AccessId), token);
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
+    }
+
+    [Authorize(Roles = "admin")]
+    [HttpGet, Route("history")]
+    public async Task<IActionResult> GetOpeningHistories(CancellationToken token)
+    {
+        var result = await _mediator.Send(new GetOpeningHistoryQuery(User.GetUserId()), token);
         return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 }
