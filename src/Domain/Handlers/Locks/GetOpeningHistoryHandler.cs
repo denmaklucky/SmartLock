@@ -34,10 +34,10 @@ public class GetOpeningHistoryHandler : IRequestHandler<GetOpeningHistoryQuery, 
         if (!getUserResult.IsSuccess)
             throw new LogicException(ErrorCodes.InternalError, $"Couldn't find an user by following `userId` {request.UserId}");
 
-        var locks = await _dataAccess.GetLocksByUserId(request.UserId, cancellationToken);
+        var openingHistories = _dataAccess.GetOpenHistoriesByUserId(request.UserId);
         return new GetOpeningHistoryResult
         {
-            Data = locks.SelectMany(l => l.OpeningHistories).Select(oh => new OpeningHistoryDto
+            Data = openingHistories.Select(oh => new OpeningHistoryDto
             {
                 AccessId = oh.AccessId,
                 LockId = oh.LockId,

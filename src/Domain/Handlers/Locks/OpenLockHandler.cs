@@ -7,7 +7,6 @@ using Domain.Results.Locks;
 using FluentValidation;
 using MediatR;
 using Model;
-using Model.Enums;
 using Model.Models.Entities;
 
 namespace Domain.Handlers.Locks;
@@ -45,20 +44,35 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
         if (@lock.IsDeleted)
             throw new LogicException(ErrorCodes.InternalError, $"The lock {@lock.Id} is deleted");
 
-        var keyId = Guid.Parse(request.KeyId);
-        var canOpenLockByKeyResult = await _mediator.Send(new CanOpenLockByKeyCommand(keyId, @lock.Id), cancellationToken);
-
-        if (!canOpenLockByKeyResult.IsSuccess)
-            return new OpenLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new []{$"Key with id {keyId} is not valid. Please try different one."}};
-        
-        @lock.OpeningHistories.Add(new OpeningHistory
+        var openHistory = new OpeningHistory
         {
             LockId = @lock.Id,
-            AccessId = keyId,
             UserName = getUserResult.UserName,
             CreatedBy = request.OpenedBy,
             CreatedOn = DateTime.UtcNow
-        });
+        };
+
+        if (!string.IsNullOrEmpty(request.KeyId))
+        {
+            var keyId = Guid.Parse(request.KeyId);
+            var canOpenLockByKeyResult = await _mediator.Send(new CanOpenLockByKeyCommand(keyId, @lock.Id), cancellationToken);
+
+            if (!canOpenLockByKeyResult.IsSuccess)
+                return new OpenLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new []{$"Key with id {keyId} is not valid. Please try different one."}};
+
+            openHistory.AccessId = keyId;
+        }
+        else
+        {
+            var accessLock = await _dataAccess.GetAccessLock(request.OpenedBy, @lock.Id, cancellationToken);
+
+            if (accessLock == null || accessLock.IsDeleted)
+                return new OpenLockResult { ErrorCode = ErrorCodes.NotFound, Messages = new[] { $"Couldn't find access with id `{request.OpenedBy}` for lock with id `{request.LockId}`" } };
+
+            openHistory.AccessId = request.OpenedBy;
+        }
+
+        @lock.OpeningHistories.Add(openHistory);
 
         var _ = await _dataAccess.UpdateLock(@lock, cancellationToken);
         return new OpenLockResult
