@@ -6,7 +6,6 @@ using Domain.Results.Locks;
 using FluentValidation;
 using MediatR;
 using Model;
-using Model.Enums;
 
 namespace Domain.Handlers.Locks;
 

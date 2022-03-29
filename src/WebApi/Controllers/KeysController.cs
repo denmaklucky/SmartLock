@@ -22,7 +22,7 @@ public class KeysController : ControllerBase
     [HttpPost, Route("create")]
     public async Task<IActionResult> CreateKey([FromBody] CreateKeyRequest request, CancellationToken token)
     {
-        var result = await _mediator.Send(new CreateKeyCommand(User.GetUserId(), request.LockId, request.UserId, request.Type, request.ExpiredAt), token);
+        var result = await _mediator.Send(new CreateKeyCommand(User.GetUserId(), request.LockId, request.UserId, request.Type), token);
         return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 
@@ -41,7 +41,9 @@ public class KeysController : ControllerBase
     }
 
     [HttpDelete, Route("{keyId}")]
-    public void Delete()
+    public async Task<IActionResult> Delete(string keyId, CancellationToken token)
     {
+        var result = await _mediator.Send(new DeleteKeyCommand(User.GetUserId(), keyId), token);
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 }

@@ -4,4 +4,4 @@ using Model.Enums;
 
 namespace Domain.Commands.Keys;
 
-public record CreateKeyCommand(Guid CreatedBy, string LockId, string UserId, KeyTypeEnum Type, DateTime? ExpiredAt) : IRequest<CreateKeyResult>;
+public record CreateKeyCommand(Guid CreatedBy, string LockId, string UserId, KeyTypeEnum Type) : IRequest<CreateKeyResult>;
