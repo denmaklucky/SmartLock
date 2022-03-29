@@ -1,0 +1,361 @@
+{
+	"info": {
+		"_postman_id": "55f57662-3c58-463a-9d34-49433e823c59",
+		"name": "SmartLock by Denis Makarenko",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Locks",
+			"item": [
+				{
+					"name": "Get Locks",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/locks",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"locks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Open a lock",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"keyId\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/locks/2f0a01b1-8d46-4709-bf4c-7857fcf51c1f/open",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"locks",
+								"2f0a01b1-8d46-4709-bf4c-7857fcf51c1f",
+								"open"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new lock",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"office\",\r\n    \"activationKey\": \"3d9d4f30-2852-4f93-8feb-b4ec95cbeef5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/locks/activate",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"locks",
+								"activate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a lock",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/locks/1abdb82a-e74e-4f15-98be-3c455f69e0a7/delete",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"locks",
+								"1abdb82a-e74e-4f15-98be-3c455f69e0a7",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Opening History",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/locks/history",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"locks",
+								"history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admit to lock",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accessId\": \"a96fe69e-cc4c-45a8-a05d-dc498368a766\",\r\n    \"type\": \"User\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/locks/2f0a01b1-8d46-4709-bf4c-7857fcf51c1f/admit",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"locks",
+								"2f0a01b1-8d46-4709-bf4c-7857fcf51c1f",
+								"admit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Activate Lock",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"office\",\r\n    \"activationKey\": \"3d9d4f30-2852-4f93-8feb-b4ec95cbeef5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/locks/activate",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"locks",
+								"activate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Keys",
+			"item": []
+		},
+		{
+			"name": "Sign in by user with `Admin` role",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var json = pm.response.json();\r",
+							"var accessToken = json.accessToken;\r",
+							"pm.environment.set(\"token\", accessToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"login\": \"admin\",\r\n    \"password\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/users/signin",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign in by user with `User` role",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var json = pm.response.json();\r",
+							"var accessToken = json.accessToken;\r",
+							"pm.environment.set(\"token\", accessToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"login\": \"user\",\r\n    \"password\": \"user\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/users/signin",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

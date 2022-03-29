@@ -7,7 +7,6 @@ Release
 .vs
 .idea
 obj
-*.json
 *.db
 *.db-shm
 *.db-wal
