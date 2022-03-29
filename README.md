@@ -6,7 +6,7 @@
 ### Start-up
 
 1 - Download source \
-![/files/1.png]
+![https://github.com/denmaklucky/SmartLock/blob/main/files/1.png]
 2 - Run application\
 3 - Import Postman collection from folder `postman`\
 4 - Create a new `environment` in Postman\
