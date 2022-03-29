@@ -1,4 +1,5 @@
 ﻿using Domain.Commands.Keys;
+using Domain.Queries.Keys;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,13 @@ public class KeysController : ControllerBase
     public async Task<IActionResult> Delete(string keyId, CancellationToken token)
     {
         var result = await _mediator.Send(new DeleteKeyCommand(User.GetUserId(), keyId), token);
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetKeys(CancellationToken token)
+    {
+        var result = await _mediator.Send(new GetKeysQuery(User.GetUserId()), token);
         return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 }

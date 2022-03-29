@@ -20,6 +20,7 @@ public interface IDataAccess
     Task<AccessLock> GetAccessLock(Guid accessId, Guid lockId, CancellationToken token);
     Task<AccessLock> UpdateAccessLock(AccessLock accessLock, CancellationToken token);
     Task<Key> UpdateKey(Key key, CancellationToken token);
+    IEnumerable<Key> GetKeysByCreatedUser(Guid createdBy);
 }
 
 public class DataAccess : IDataAccess, IDisposable
@@ -125,6 +126,9 @@ public class DataAccess : IDataAccess, IDisposable
 
         return entityKey.Entity;
     }
+
+    public IEnumerable<Key> GetKeysByCreatedUser(Guid createdBy)
+        => _context.Keys.Where(k => k.CreatedBy == createdBy);
 
     public void Dispose()
         => _context?.Dispose();

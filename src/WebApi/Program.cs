@@ -3,6 +3,7 @@ using Domain;
 using Domain.Commands.Keys;
 using Domain.Commands.Locks;
 using Domain.Options;
+using Domain.Queries.Keys;
 using Domain.Queries.Locks;
 using Domain.Services;
 using Domain.Validators.Keys;
@@ -58,6 +59,7 @@ builder.Services.AddScoped<IValidator<ForbidLockCommand>, ForbidLockCommandValid
 builder.Services.AddScoped<IValidator<GetOpeningHistoryQuery>, GetOpeningHistoryQueryValidator>();
 builder.Services.AddScoped<IValidator<ChangeUserForKeyCommand>, ChangeUserForKeyCommandValidator>();
 builder.Services.AddScoped<IValidator<ChangeLockForKeyCommand>, ChangeLockForKeyCommandValidator>();
+builder.Services.AddScoped<IValidator<GetKeysQuery>, GetKeysQueryValidator>();
 
 var app = builder.Build();
 
