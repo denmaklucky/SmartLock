@@ -35,6 +35,6 @@ public class SignInHandler : IRequestHandler<SignInCommand, SignInResult>
         var role = await _dataAccess.GetRole(userRole.RoleId, cancellationToken);
 
         var bearerToken = _tokenService.GenerateBearerToken(user, role);
-        return new SignInResult { AcessToken = bearerToken };
+        return new SignInResult { AccessToken = bearerToken };
     }
 }

@@ -23,6 +23,6 @@ public class UsersController : ControllerBase
     public async  Task<IActionResult> SignIn([FromBody] SignInRequest request, CancellationToken token)
     {
         var result = await _mediator.Send(new SignInCommand(request.Login, request.Password), token);
-        return result.IsSuccess ? Ok(new SignInResponse(result.AcessToken)) : BadRequest(new ErrorResponse(result.ErrorCode));
+        return result.IsSuccess ? Ok(new SignInResponse(result.AccessToken)) : BadRequest(new ErrorResponse(result.ErrorCode));
     }
 }

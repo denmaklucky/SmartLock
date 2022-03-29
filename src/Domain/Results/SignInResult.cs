@@ -2,5 +2,5 @@
 
 public class SignInResult : BaseResult
 {
-    public string AcessToken { get; set; }
+    public string AccessToken { get; set; }
 }
