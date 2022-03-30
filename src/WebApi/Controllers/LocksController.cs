@@ -32,7 +32,7 @@ public class LocksController : ControllerBase
     [HttpPost, ValidateRequest, Route("{lockId}/open")]
     public async Task<IActionResult> Open(string lockId, [FromBody] OpenLockRequest request, CancellationToken token)
     {
-        var result = await _mediator.Send(new OpenLockCommand(lockId, request.KeyId, User.GetUserId()), token);
+        var result = await _mediator.Send(new OpenLockCommand(lockId, request.KeyId, request.AccessType, User.GetUserId()), token);
         return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 

@@ -7,6 +7,7 @@ using Domain.Results.Locks;
 using FluentValidation;
 using MediatR;
 using Model;
+using Model.Enums;
 using Model.Models.Entities;
 
 namespace Domain.Handlers.Locks;
@@ -52,7 +53,7 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
             CreatedOn = DateTime.UtcNow
         };
 
-        if (!string.IsNullOrEmpty(request.KeyId))
+        if (request.AccessType == AccessTypeEnum.Key)
         {
             var keyId = Guid.Parse(request.KeyId);
             var canOpenLockByKeyResult = await _mediator.Send(new CanOpenLockByKeyCommand(keyId, @lock.Id), cancellationToken);

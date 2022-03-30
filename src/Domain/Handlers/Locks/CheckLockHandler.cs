@@ -17,7 +17,7 @@ public class CheckLockHandler : IRequestHandler<CheckLockCommand, CheckLockResul
     public async Task<CheckLockResult> Handle(CheckLockCommand request, CancellationToken cancellationToken)
     {
         var @lock = await _dataAccess.GetLock(request.LockId, cancellationToken);
-        return @lock == null
+        return @lock == null || @lock.IsDeleted
             ? new CheckLockResult { ErrorCode = ErrorCodes.NotFound }
             : new CheckLockResult();
     }
