@@ -14,7 +14,7 @@
  - Get all available keys * <br/> 
  - Different access by roles
 
- * - Only for user with `Admin` role
+ \* - Only for user with `Admin` role
 
 
 ### Before start-up
@@ -35,17 +35,17 @@ dotnet run
 
 4 - Import Postman collection. Open `Postman` and click on `Import` button, look at the picture below<br/>
 
-<img src="https://github.com/denmaklucky/SmartLock/blob/main/files/4.png" width=331 height=435 align="center"/>
+<img src="https://github.com/denmaklucky/SmartLock/blob/main/files/4.png" width=331 height=435/>
 
 Then you need to upload the file `SmartLock-main/postman/SmartLock by Denis Makarenko.postman_collection.json` <br/>
 
 5 - Create a new `Environment` in Postman, look at the picture below <br/>
 
-<img src="https://github.com/denmaklucky/SmartLock/blob/main/files/5.png" width=346 height=402 align="center"/>
+<img src="https://github.com/denmaklucky/SmartLock/blob/main/files/5.png" width=346 height=402/>
 
 > Put the name of the environment and save it
 
-6 - Add new variables: `url` and `token`. In `url` variable past the following value -- `https://localhost:7167` <br/>
+6 - Add new variables: `url` and `token`. In `url` variable paste the following value -- `https://localhost:7167` <br/>
 7 - Open `Collections` and find `SmartLock by Denis Makarenko`
 
 Now you can use the application
