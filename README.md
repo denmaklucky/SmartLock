@@ -45,12 +45,13 @@ Now you can use the application
 
 ### Use cases
 
-|Case| Order requests|
+|Case| Requests order|
 |-|-|
-|Activate lock| 0, 4, 3|
-|Give access for user| 0, 7, 1, 3|
+|Activate the lock| 0, 4, 3|
+|Give access to the lock for user| 1, 3, 0, 7, 1, 3|
 |Remove access for user|0, 9, 1, 3|
 |Create a new key and give access to the user|0, 10, 1, 15|
+|Remove the key|0, 14, 1, 15|
 |See opening history|0, 6|
 |See all keys|0, 13|
 |See all locks|0, 2|
