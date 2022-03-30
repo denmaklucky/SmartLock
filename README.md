@@ -39,13 +39,6 @@ dotnet run
 
 Then you need to upload the file `SmartLock-main/postman/SmartLock by Denis Makarenko.postman_collection.json` <br/>
 
-5 - Create a new `Environment` in Postman, look at the picture below <br/>
-
-<img src="https://github.com/denmaklucky/SmartLock/blob/main/files/5.png" width=346 height=402/>
-
-> Put the name of the environment and save it
-
-6 - Add new variables: `url` and `token`. In `url` variable paste the following value -- `https://localhost:7167` <br/>
-7 - Open `Collections` and find `SmartLock by Denis Makarenko`
+5 - Open `Collections` and find `SmartLock by Denis Makarenko`
 
 Now you can use the application
