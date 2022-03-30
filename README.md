@@ -42,3 +42,15 @@ Then you need to upload the file `SmartLock-main/postman/SmartLock by Denis Maka
 5 - Open `Collections` and find `SmartLock by Denis Makarenko`
 
 Now you can use the application
+
+### Use cases
+
+|Case| Order requests|
+|-|-|
+|Activate lock| 0, 4, 3|
+|Give access for user| 0, 7, 1, 3|
+|Remove access for user|0, 9, 1, 3|
+|Create a new key and give access to the user|0, 10, 1, 15|
+|See opening history|0, 6|
+|See all keys|0, 13|
+|See all locks|0, 2|

@@ -80,7 +80,7 @@
 					"response": []
 				},
 				{
-					"name": "3 - Open the lock by key",
+					"name": "15 - Open the lock by key",
 					"request": {
 						"auth": {
 							"type": "bearer",
