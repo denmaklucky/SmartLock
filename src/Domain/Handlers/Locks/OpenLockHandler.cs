@@ -60,7 +60,7 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
             var canOpenLockByKeyResult = await _mediator.Send(new CanOpenLockByKeyCommand(keyId, @lock.Id), cancellationToken);
 
             if (!canOpenLockByKeyResult.IsSuccess)
-                return new OpenLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new []{$"Key with id {keyId} is not valid. Please try different one."}};
+                return new OpenLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new []{"You can't open the lock by following key. Please try different one."}};
 
             openHistory.AccessId = keyId;
         }

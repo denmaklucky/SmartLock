@@ -21,7 +21,7 @@ public class ExceptionHandlerMiddleware
         {
             await _next.Invoke(context);
         }
-        catch (Exception e)
+        catch
         {
             context.Response.Clear();
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

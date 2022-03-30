@@ -31,7 +31,7 @@
 dotnet run
 ```
 
-> Before running the app by CLI you need to change directory to `SmartLock-main/src`
+> Before running the app by CLI you need to change directory to `SmartLock-main/src/WebApi`
 
 4 - Import Postman collection. Open `Postman` and click on `Import` button, look at the picture below<br/>
 
