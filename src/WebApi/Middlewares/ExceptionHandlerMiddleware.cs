@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Net.Mime;
-using Domain.Exceptions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using WebApi.Responses;
@@ -22,26 +21,13 @@ public class ExceptionHandlerMiddleware
         {
             await _next.Invoke(context);
         }
-        catch (LogicException e)
-        {
-            context.Response.Clear();
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            context.Response.Headers.ContentType = MediaTypeNames.Application.Json;
-
-            var errorResponse = new ErrorResponse(e.ErrorCode, e.ErrorMessage);
-            var settings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
-            var json = JsonConvert.SerializeObject(errorResponse, Formatting.Indented, settings);
-
-            await context.Response.WriteAsync(json);
-        }
         catch (Exception e)
         {
             context.Response.Clear();
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             context.Response.Headers.ContentType = MediaTypeNames.Application.Json;
-
-            //Remove the error
-            var errorResponse = new ErrorResponse("InternalServerError", e.Message);
+            
+            var errorResponse = new ErrorResponse("InternalServerError");
             var settings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
             var json = JsonConvert.SerializeObject(errorResponse, Formatting.Indented, settings);
 

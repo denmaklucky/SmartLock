@@ -25,6 +25,7 @@ builder.Services.AddMediatR(typeof(MediatREntryPoint).Assembly);
 builder.Services.AddScoped<IHashService, HashService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
+#region JWT
 var tokenOptions = builder.Configuration .GetSection(TokenOptions.SectionName);
 
 builder.Services.AddAuthentication("Bearer")
@@ -47,7 +48,9 @@ builder.Services.AddAuthentication("Bearer")
     });
 
 builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection(TokenOptions.SectionName));
+#endregion
 
+#region Validators
 builder.Services.AddScoped<IValidator<GetLocksQuery>, GetLocksQueryValidator>();
 builder.Services.AddScoped<IValidator<ActivateLockCommand>, ActivateLockCommandValidator>();
 builder.Services.AddScoped<IValidator<DeleteLockCommand>, DeleteLockCommandValidator>();
@@ -61,6 +64,7 @@ builder.Services.AddScoped<IValidator<ChangeUserForKeyCommand>, ChangeUserForKey
 builder.Services.AddScoped<IValidator<ChangeLockForKeyCommand>, ChangeLockForKeyCommandValidator>();
 builder.Services.AddScoped<IValidator<DeleteKeyCommand>, DeleteKeyCommandValidator>();
 builder.Services.AddScoped<IValidator<GetKeysQuery>, GetKeysQueryValidator>();
+#endregion
 
 var app = builder.Build();
 
