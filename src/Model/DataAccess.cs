@@ -76,7 +76,7 @@ public class DataAccess : IDataAccess, IDisposable
         => _context.Keys.FirstOrDefaultAsync(k => k.Id == keyId, token);
 
     public IEnumerable<Lock> GetLocksByUserId(Guid userId)
-        => GeAllAvailabletLocksForUser(userId);
+        => GeAllAvailableLocksForUser(userId);
 
     public async Task<Key> AddKey(Key key, CancellationToken token)
     {
@@ -116,14 +116,14 @@ public class DataAccess : IDataAccess, IDisposable
     public IEnumerable<OpeningHistory> GetOpenHistoriesByUserId(Guid userId)
     {
         var openingHistoryForAllLockQuery =
-            from l in GeAllAvailabletLocksForUser(userId)
+            from l in GeAllAvailableLocksForUser(userId)
             join oh in _context.OpeningHistories on l.Id equals oh.LockId
             select oh;
 
-        return openingHistoryForAllLockQuery;
+        return openingHistoryForAllLockQuery.OrderByDescending(oh => oh.CreatedOn);
     }
 
-    private IQueryable<Lock> GeAllAvailabletLocksForUser(Guid userId)
+    private IQueryable<Lock> GeAllAvailableLocksForUser(Guid userId)
     {
         var getLocksByUserAccessQuery =
             from al in _context.AccessLocks

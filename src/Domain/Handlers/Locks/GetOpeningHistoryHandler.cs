@@ -42,7 +42,8 @@ public class GetOpeningHistoryHandler : IRequestHandler<GetOpeningHistoryQuery, 
                 AccessId = oh.AccessId,
                 LockId = oh.LockId,
                 OpenedOn = oh.CreatedOn,
-                UserName = oh.UserName
+                UserName = oh.UserName,
+                AccessType = oh.AccessType
             }).ToArray()
         };
     }

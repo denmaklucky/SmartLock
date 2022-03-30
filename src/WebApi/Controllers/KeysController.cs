@@ -34,7 +34,7 @@ public class KeysController : ControllerBase
         return result.IsSuccess ? Ok(result.Data) : BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
     }
 
-    [HttpPost, Route("{keyId}/change-lock")]
+    [HttpPatch, Route("{keyId}/change-lock")]
     public async Task<IActionResult> ChangeLock(string keyid, [FromBody] ChangeLockForKeyRequest request, CancellationToken token)
     {
         var result = await _mediator.Send(new ChangeLockForKeyCommand(User.GetUserId(), keyid, request.NewLockId, request.OldNewLockId), token);

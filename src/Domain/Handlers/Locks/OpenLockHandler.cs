@@ -50,7 +50,8 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
             LockId = @lock.Id,
             UserName = getUserResult.UserName,
             CreatedBy = request.OpenedBy,
-            CreatedOn = DateTime.UtcNow
+            CreatedOn = DateTime.UtcNow,
+            AccessType = request.AccessType
         };
 
         if (request.AccessType == AccessTypeEnum.Key)
@@ -68,7 +69,7 @@ public class OpenLockHandler : IRequestHandler<OpenLockCommand, OpenLockResult>
             var accessLock = await _dataAccess.GetAccessLock(request.OpenedBy, @lock.Id, cancellationToken);
 
             if (accessLock == null || accessLock.IsDeleted)
-                return new OpenLockResult { ErrorCode = ErrorCodes.NotFound, Messages = new[] { $"Couldn't find access with id `{request.OpenedBy}` for lock with id `{request.LockId}`" } };
+                return new OpenLockResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new[] { "User doesn't have access to open the lock" } };
 
             openHistory.AccessId = request.OpenedBy;
         }

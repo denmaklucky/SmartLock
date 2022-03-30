@@ -9,7 +9,7 @@
 			"name": "Locks",
 			"item": [
 				{
-					"name": "Get Locks",
+					"name": "2 - Get locks",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -24,10 +24,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/locks",
+							"raw": "https://localhost:7167/api/locks",
+							"protocol": "https",
 							"host": [
-								"{{url}}"
+								"localhost"
 							],
+							"port": "7167",
 							"path": [
 								"api",
 								"locks"
@@ -37,7 +39,7 @@
 					"response": []
 				},
 				{
-					"name": "Open a lock",
+					"name": "3 - Open the lock by user access",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -53,7 +55,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"keyId\": \"\"\r\n}",
+							"raw": "{\r\n    \"accessType\": \"User\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -61,14 +63,16 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/locks/2f0a01b1-8d46-4709-bf4c-7857fcf51c1f/open",
+							"raw": "https://localhost:7167/api/locks/{{lockId}}/open",
+							"protocol": "https",
 							"host": [
-								"{{url}}"
+								"localhost"
 							],
+							"port": "7167",
 							"path": [
 								"api",
 								"locks",
-								"2f0a01b1-8d46-4709-bf4c-7857fcf51c1f",
+								"{{lockId}}",
 								"open"
 							]
 						}
@@ -76,7 +80,61 @@
 					"response": []
 				},
 				{
-					"name": "Create a new lock",
+					"name": "3 - Open the lock by key",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"keyId\": \"{{keyId}}\",\r\n    \"accessType\": \"Key\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7167/api/locks/{{lockId}}/open",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7167",
+							"path": [
+								"api",
+								"locks",
+								"{{lockId}}",
+								"open"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4 - Activate the lock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();\r",
+									"var lockId = json.id;\r",
+									"pm.globals.set(\"lockId\", lockId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -100,10 +158,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/locks/activate",
+							"raw": "https://localhost:7167/api/locks/activate",
+							"protocol": "https",
 							"host": [
-								"{{url}}"
+								"localhost"
 							],
+							"port": "7167",
 							"path": [
 								"api",
 								"locks",
@@ -114,7 +174,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete a lock",
+					"name": "5 - Delete the lock",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -129,22 +189,23 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/locks/1abdb82a-e74e-4f15-98be-3c455f69e0a7/delete",
+							"raw": "https://localhost:7167/api/locks/{{lockId}}",
+							"protocol": "https",
 							"host": [
-								"{{url}}"
+								"localhost"
 							],
+							"port": "7167",
 							"path": [
 								"api",
 								"locks",
-								"1abdb82a-e74e-4f15-98be-3c455f69e0a7",
-								"delete"
+								"{{lockId}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get Opening History",
+					"name": "6 - Get opening history for all available locks",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -171,10 +232,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/locks/history",
+							"raw": "https://localhost:7167/api/locks/history",
+							"protocol": "https",
 							"host": [
-								"{{url}}"
+								"localhost"
 							],
+							"port": "7167",
 							"path": [
 								"api",
 								"locks",
@@ -185,7 +248,7 @@
 					"response": []
 				},
 				{
-					"name": "Admit to lock",
+					"name": "7 - Give access to the lock",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -209,13 +272,16 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}api/locks/2f0a01b1-8d46-4709-bf4c-7857fcf51c1f/admit",
+							"raw": "https://localhost:7167/api/locks/{{lockId}}/admit",
+							"protocol": "https",
 							"host": [
-								"{{url}}api"
+								"localhost"
 							],
+							"port": "7167",
 							"path": [
+								"api",
 								"locks",
-								"2f0a01b1-8d46-4709-bf4c-7857fcf51c1f",
+								"{{lockId}}",
 								"admit"
 							]
 						}
@@ -223,7 +289,20 @@
 					"response": []
 				},
 				{
-					"name": "Activate Lock",
+					"name": "8 - Activate the lock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();\r",
+									"var lockId = json.id;\r",
+									"pm.globals.set(\"lockId\", lockId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -247,14 +326,57 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/locks/activate",
+							"raw": "https://localhost:7167/api/locks/activate",
+							"protocol": "https",
 							"host": [
-								"{{url}}"
+								"localhost"
 							],
+							"port": "7167",
 							"path": [
 								"api",
 								"locks",
 								"activate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "9 - Get access back for the lock",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accessId\": \"a96fe69e-cc4c-45a8-a05d-dc498368a766\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7167/api/locks/{{lockId}}/forbid",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7167",
+							"path": [
+								"api",
+								"locks",
+								"{{lockId}}",
+								"forbid"
 							]
 						}
 					},
@@ -264,10 +386,207 @@
 		},
 		{
 			"name": "Keys",
-			"item": []
+			"item": [
+				{
+					"name": "10 - Create a key for the lock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();\r",
+									"var keyId = json.id;\r",
+									"pm.globals.set(\"keyId\", keyId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lockId\": \"{{lockId}}\",\r\n    \"userId\": \"a96fe69e-cc4c-45a8-a05d-dc498368a766\",\r\n    \"type\": \"Tag\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7167/api/keys/create",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7167",
+							"path": [
+								"api",
+								"keys",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "11 - Change an user for the key",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newUserId\": \"02387541-4280-4d14-86d9-9386310de6ce\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7167/api/keys/{{keyId}}/change-user",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7167",
+							"path": [
+								"api",
+								"keys",
+								"{{keyId}}",
+								"change-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "12 - Change a lock for the key",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newLockId\": \"{{lockId}}\",\r\n    \"oldNewLockId\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7167/api/keys/{{keyId}}/change-lock",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7167",
+							"path": [
+								"api",
+								"keys",
+								"{{keyId}}",
+								"change-lock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "13 - Get all keys",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7167/api/keys",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7167",
+							"path": [
+								"api",
+								"keys"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "14 - Delete the key",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7167/api/keys/{{keyId}}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7167",
+							"path": [
+								"api",
+								"keys",
+								"{{keyId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"name": "Sign in by user with `Admin` role",
+			"name": "0 - Sign in by user with `Admin` role",
 			"event": [
 				{
 					"listen": "test",
@@ -275,7 +594,7 @@
 						"exec": [
 							"var json = pm.response.json();\r",
 							"var accessToken = json.accessToken;\r",
-							"pm.environment.set(\"token\", accessToken);"
+							"pm.globals.set(\"token\", accessToken);"
 						],
 						"type": "text/javascript"
 					}
@@ -294,10 +613,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/api/users/signin",
+					"raw": "https://localhost:7167/api/users/signin",
+					"protocol": "https",
 					"host": [
-						"{{url}}"
+						"localhost"
 					],
+					"port": "7167",
 					"path": [
 						"api",
 						"users",
@@ -308,7 +629,7 @@
 			"response": []
 		},
 		{
-			"name": "Sign in by user with `User` role",
+			"name": "1 - Sign in by user with `User` role",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -325,7 +646,7 @@
 						"exec": [
 							"var json = pm.response.json();\r",
 							"var accessToken = json.accessToken;\r",
-							"pm.environment.set(\"token\", accessToken);"
+							"pm.globals.set(\"token\", accessToken);"
 						],
 						"type": "text/javascript"
 					}
@@ -344,10 +665,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/api/users/signin",
+					"raw": "https://localhost:7167/api/users/signin",
+					"protocol": "https",
 					"host": [
-						"{{url}}"
+						"localhost"
 					],
+					"port": "7167",
 					"path": [
 						"api",
 						"users",
